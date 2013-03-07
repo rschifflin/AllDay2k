@@ -1,7 +1,7 @@
 #ifndef RS_PRIMITIVES
 #define RS_PRIMITIVES
 
-#include "sdl_opengl.h"
+#include "SDL/SDL_opengl.h"
 #include <math.h>
 //SDL_OPENGL draw primitives
 namespace RicochetRobots

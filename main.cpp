@@ -1,16 +1,13 @@
 //Simple 2D 'Snake' game using the component model
-#include "sdl.h"
-#include "sdl_opengl.h"
-#include "IL/il.h"
-#include "IL/ilu.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_opengl.h"
 
 //#include "SimpleEngine.h"
-#include "Board.h"
+#include "Board.hpp"
 
 int init();
 int SDLInit();
 int OpenGLInit();
-int DevILInit();
 
 void handleInput();
 void draw();
@@ -42,8 +39,6 @@ int init()
 	if (SDLInit())
 		return 1;
 	if (OpenGLInit())
-		return 1;
-	if (DevILInit())
 		return 1;
 	return 0;
 }
@@ -93,19 +88,6 @@ int OpenGLInit()
 	return 0;
 }
 
-int DevILInit()
-{
-	ilInit();
-	ilClearColor(0xFF,0xFF,0xFF,0x00);
-	ILenum ilError = ilGetError();
-	if (ilError != IL_NO_ERROR)
-	{
-		//std::cout << "Error initializing DevIL" << std::endl;
-		return 1;
-	}
-
-	return 0;
-}
 
 void handleInput()
 {

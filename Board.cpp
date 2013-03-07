@@ -1,8 +1,8 @@
-#include "Board.h"
-#include "sdl_opengl.h"
+#include "Board.hpp"
+#include "SDL/SDL_opengl.h"
 #include <random>
 #include <time.h>
-#include "Primitives.h"
+#include "Primitives.hpp"
 
 namespace RicochetRobots
 {
