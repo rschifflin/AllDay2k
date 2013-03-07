@@ -1,6 +1,6 @@
 #include "Board.hpp"
 #include "SDL/SDL_opengl.h"
-#include <random>
+#include <stdlib.h>
 #include <time.h>
 #include "Primitives.hpp"
 
@@ -125,14 +125,14 @@ namespace RicochetRobots
 		{
 			if (m_angle == 0)
 			{
-				for (int i = 0; i < BOARDSIZE/2; i++)
-					for (int j = 0; j < BOARDSIZE/2; j++)
+				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 						m_grid[i][j] = m_gridA[i][j];
 			}
 			else if (m_angle == 90)
 			{
-				for (int i = 0; i < BOARDSIZE/2; i++)
-					for (int j = 0; j < BOARDSIZE/2; j++)
+				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = j;
 						int v = BOARDSIZE/2 - 1 - i;
@@ -147,8 +147,8 @@ namespace RicochetRobots
 			}
 			else if (m_angle == 180)
 			{
-				for (int i = 0; i < BOARDSIZE/2; i++)
-					for (int j = 0; j < BOARDSIZE/2; j++)
+				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = BOARDSIZE/2 - 1 - i;
 						int v = BOARDSIZE/2 - 1 - j;
@@ -163,8 +163,8 @@ namespace RicochetRobots
 			}
 			else if (m_angle == 270)
 			{
-				for (int i = 0; i < BOARDSIZE/2; i++)
-					for (int j = 0; j < BOARDSIZE/2; j++)
+				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = BOARDSIZE/2 - 1 - j;
 						int v = i;
@@ -183,14 +183,14 @@ namespace RicochetRobots
 		{
 			if (m_angle == 0)
 			{
-				for (int i = 0; i < BOARDSIZE/2; i++)
-					for (int j = 0; j < BOARDSIZE/2; j++)
+				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 						m_grid[i][j] = m_gridB[i][j];
 			}
 			else if (m_angle == 90)
 			{
-				for (int i = 0; i < BOARDSIZE/2; i++)
-					for (int j = 0; j < BOARDSIZE/2; j++)
+				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = j;
 						int v = BOARDSIZE/2 - 1 - i;
@@ -215,8 +215,8 @@ namespace RicochetRobots
 			}
 			else if (m_angle == 180)
 			{
-				for (int i = 0; i < BOARDSIZE/2; i++)
-					for (int j = 0; j < BOARDSIZE/2; j++)
+				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = BOARDSIZE/2 - 1 - i;
 						int v = BOARDSIZE/2 - 1 - j;
@@ -231,8 +231,8 @@ namespace RicochetRobots
 			}
 			else if (m_angle == 270)
 			{
-				for (int i = 0; i < BOARDSIZE/2; i++)
-					for (int j = 0; j < BOARDSIZE/2; j++)
+				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = BOARDSIZE/2 - 1 - j;
 						int v = i;
@@ -283,8 +283,8 @@ namespace RicochetRobots
 
 	void Board::draw()
 	{
-		for (int i = 0; i < BOARDSIZE; i++)
-			for (int j = 0; j < BOARDSIZE; j++)
+		for (unsigned int i = 0; i < BOARDSIZE; i++)
+			for (unsigned int j = 0; j < BOARDSIZE; j++)
 			{
 				//Clear color is white, drawing white squares unneccesary
 				/*
@@ -404,24 +404,24 @@ namespace RicochetRobots
 		sub.loadType(0);
 
 		sub.back();
-		for (int i = 0; i < BOARDSIZE/2; i++)
-			for (int j = 0; j < BOARDSIZE/2; j++)
+		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 				m_grid[i][j] = sub.get(i,j);
 			
 		sub.rotate90();
-		for (int i = 0; i < BOARDSIZE/2; i++)
-			for (int j = 0; j < BOARDSIZE/2; j++)
+		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 				m_grid[i + BOARDSIZE/2][j] = sub.get(i,j);
 		
 	
 		sub.rotate270();
-		for (int i = 0; i < BOARDSIZE/2; i++)
-			for (int j = 0; j < BOARDSIZE/2; j++)
+		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 				m_grid[i][j + BOARDSIZE/2] = sub.get(i,j);
 			
 		sub.rotate180();
-		for (int i = 0; i < BOARDSIZE/2; i++)
-			for (int j = 0; j < BOARDSIZE/2; j++)
+		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 				m_grid[i + BOARDSIZE/2][j + BOARDSIZE/2] = sub.get(i,j);
 	}
 } //End Namespace

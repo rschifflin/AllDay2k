@@ -13,6 +13,7 @@
 #include "SDL/SDL_opengl.h"
 
 #include "Board.hpp" //Board object
+#include "Timer.hpp" //Timer object
 //#include "Solver.hpp" //Solver object; requires setup(Board) before solving can begin; 
 
 int init();
@@ -24,6 +25,9 @@ void draw();
 
 int SCREENWIDTH = 512;
 int SCREENHEIGHT = 512;
+
+const int FRAMES_PER_SEC = 60;
+const int MS_PER_FRAME = (1000 / FRAMES_PER_SEC);
 
 enum SolveMode
 {
@@ -38,11 +42,15 @@ bool hasQuit = false;
 
 int main(int argc, char** argv)
 {
+	
 	if (init())
 		return 0;
 
+	Timer fps;
 	while (!hasQuit)
 	{
+		fps.start();
+		
 		switch (solveMode)
 		{
 			case UNSOLVED:
@@ -60,6 +68,12 @@ int main(int argc, char** argv)
 		
 		handleInput();
 		draw();
+
+		uint32_t elapsed = fps.getTicks();
+		if (elapsed < MS_PER_FRAME )
+			SDL_Delay( MS_PER_FRAME - elapsed);
+
+		fps.reset();
 	}
 	
 	SDL_Quit();
