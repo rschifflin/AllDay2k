@@ -346,6 +346,10 @@ namespace RicochetRobots
 				//Draw pieces
 				switch (m_grid[i][j].goalPiece)
 				{
+				default:
+				case NOGOALPIECE:
+				
+					break;
 				case GREENTRIANGLE:
 					glColor3f(0.0f	, 1.0f	, 0.0f	);
 					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
@@ -366,6 +370,10 @@ namespace RicochetRobots
 
 				switch (m_grid[i][j].bumper)
 				{
+				default:
+				case NOBUMPER:
+				
+					break;
 				case GREENFORWARD:
 					glColor3f(0.0f	, 1.0f	, 0.0f	);
 					Primitives::drawForwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
