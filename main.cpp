@@ -1,9 +1,19 @@
-//Simple 2D 'Snake' game using the component model
+//Program generates and solves arbitrary Ricochet Robots boards
+
+//Program has 3 stages
+/*
+	'Unsolved'; takes parameters for setting up a random board
+ 
+	'Solving'; uses A* to search for a solution in optimal # of moves
+   
+	'Solved'; Allows user to navigate solution with left/right arrows, or revert to Unsolved
+ */
+
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
-//#include "SimpleEngine.h"
-#include "Board.hpp"
+#include "Board.hpp" //Board object
+//#include "Solver.hpp" //Solver object; requires setup(Board) before solving can begin; 
 
 int init();
 int SDLInit();
@@ -15,6 +25,14 @@ void draw();
 int SCREENWIDTH = 512;
 int SCREENHEIGHT = 512;
 
+enum SolveMode
+{
+	UNSOLVED,
+	SOLVING,
+	SOLVED,
+	FUTILE
+} solveMode;
+
 RicochetRobots::Board* gameBoard = new RicochetRobots::Board();
 bool hasQuit = false;
 
@@ -25,6 +43,21 @@ int main(int argc, char** argv)
 
 	while (!hasQuit)
 	{
+		switch (solveMode)
+		{
+			case UNSOLVED:
+				//In this mode, various keypresses set up the board's initial state
+				break;
+			
+			case SOLVED:
+				//In this mode, various keypresses navigate the board's solution
+				break;
+				
+			case FUTILE:
+				//In this mode, no solution was found
+				break;
+		}
+		
 		handleInput();
 		draw();
 	}
