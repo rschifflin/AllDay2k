@@ -1,11 +1,11 @@
 CC = clang++
-CFLAGS = -o
+CFLAGS = -Weverything -o
 CLIBS = -lSDL -lGL
 
-Solver.exe : main.o Board.o Timer.o
-	$(CC) $(CFLAGS) $@ main.o Board.o Timer.o $(CLIBS)
+Solver.exe : main.o Board.o Timer.o GLNumbers.o
+	$(CC) $(CFLAGS) $@ main.o Board.o Timer.o GLNumbers.o $(CLIBS)
 
-main.o : main.cpp Board.hpp Timer.hpp
+main.o : main.cpp Board.hpp Timer.hpp Primitives.hpp GLNumbers.hpp
 	$(CC) -c main.cpp
 
 Board.o : Board.cpp Primitives.hpp
@@ -13,3 +13,6 @@ Board.o : Board.cpp Primitives.hpp
 
 Timer.o: Timer.cpp
 	$(CC) -c Timer.cpp
+
+GLNumbers.o: GLNumbers.cpp
+	$(CC) -c GLNumbers.cpp
