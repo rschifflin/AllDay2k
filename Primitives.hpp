@@ -3,12 +3,13 @@
 
 #include "SDL/SDL_opengl.h"
 #include <math.h>
+
 //SDL_OPENGL draw primitives
 namespace RicochetRobots
 {
 	namespace Primitives
 	{
-		void drawSquare(int x, int y, int w, int h)
+		inline void drawSquare(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
 				glVertex2i(x	, y    );
@@ -19,7 +20,7 @@ namespace RicochetRobots
 
 		}
 		
-		void drawCircle(int cx, int cy, int r, int nVertices)
+		inline void drawCircle(int cx, int cy, int r, int nVertices)
 		{
 			float theta = (2.0f * 3.14159f) / float(nVertices); // 2PI / numVertices
 			float tangent = tan(theta); //Distance moved tangential to the circle
@@ -45,7 +46,7 @@ namespace RicochetRobots
 
 		}
 
-		void drawDiamond(int x, int y, int w, int h)
+		inline void drawDiamond(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
 				glVertex2i(x + w/2 , y       );
@@ -55,7 +56,7 @@ namespace RicochetRobots
 			glEnd();
 		}
 
-		void drawTriangle(int x, int y, int b, int h)
+		inline void drawTriangle(int x, int y, int b, int h)
 		{
 			glBegin(GL_TRIANGLES);
 				glVertex2i(x + b/2	, y		);
@@ -63,8 +64,17 @@ namespace RicochetRobots
 				glVertex2i(x		, y + h	);
 			glEnd();
 		}
+		
+		inline void drawTriangle(int ax, int ay, int bx, int by, int cx, int cy)
+		{
+			glBegin(GL_TRIANGLES);
+				glVertex2i(ax	, ay	);
+				glVertex2i(bx	, by	);
+				glVertex2i(cx	, cy	);
+			glEnd();			
+		}
 
-		void drawForwardSlash(int x, int y, int w, int h)
+		inline void drawForwardSlash(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
 				glVertex2i(x + (int)(w * 0.75)	, y		);
@@ -74,7 +84,7 @@ namespace RicochetRobots
 			glEnd();
 		}
 
-		void drawBackwardSlash(int x, int y, int w, int h)
+		inline void drawBackwardSlash(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
 				glVertex2i(x					, y		);
@@ -83,6 +93,21 @@ namespace RicochetRobots
 				glVertex2i(x + (int)(w * 0.75)	, y + h	);
 			glEnd();
 		}
+		
+		inline void drawOctagon(int x, int y, int w, int h)
+		{
+			glBegin(GL_POLYGON);
+				glVertex2i(x + (int)(w * 0.293)	, y						);
+				glVertex2i(x + (int)(w * 0.707)	, y						);
+				glVertex2i(x + w				, y + (int)(h * 0.293)	);
+				glVertex2i(x + w				, y + (int)(h * 0.707)	);
+				glVertex2i(x + (int)(w * 0.707)	, y	+ h					);
+				glVertex2i(x + (int)(w * 0.293)	, y	+ h					);
+				glVertex2i(x 					, y + (int)(h * 0.707)	);
+				glVertex2i(x 					, y + (int)(h * 0.293)	);
+			glEnd();
+		}
+		
 	}
 }
 

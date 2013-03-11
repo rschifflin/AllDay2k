@@ -12,6 +12,8 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
+#include "Primitives.hpp" //Draw primitives
+#include "GLNumbers.hpp" //Draw numbers
 #include "Board.hpp" //Board object
 #include "Timer.hpp" //Timer object
 //#include "Solver.hpp" //Solver object; requires setup(Board) before solving can begin; 
@@ -24,9 +26,9 @@ void handleInput();
 void draw();
 
 int SCREENWIDTH = 512;
-int SCREENHEIGHT = 512;
+int SCREENHEIGHT = 548;
 
-const int FRAMES_PER_SEC = 60;
+const int FRAMES_PER_SEC = 30;
 const int MS_PER_FRAME = (1000 / FRAMES_PER_SEC);
 
 enum SolveMode
@@ -40,12 +42,16 @@ enum SolveMode
 RicochetRobots::Board* gameBoard = new RicochetRobots::Board();
 bool hasQuit = false;
 
+Timer testTimer;
+
+
 int main(int argc, char** argv)
 {
 	
 	if (init())
 		return 0;
 
+	testTimer.start();
 	Timer fps;
 	while (!hasQuit)
 	{
@@ -53,6 +59,7 @@ int main(int argc, char** argv)
 		
 		switch (solveMode)
 		{
+			default:
 			case UNSOLVED:
 				//In this mode, various keypresses set up the board's initial state
 				break;
@@ -98,7 +105,7 @@ int SDLInit()
 		return 1;
 	}
 
-	SDL_putenv("SDL_VIDEO_CENTERED=center");
+	//SDL_putenv("SDL_VIDEO_CENTERED=center");
 	if (SDL_SetVideoMode(SCREENWIDTH, SCREENHEIGHT, 32, SDL_OPENGL | SDL_RESIZABLE ) == NULL)
 	{
 		//std::cout << "Error opening screen" << std::endl;
@@ -153,12 +160,13 @@ void handleInput()
 
 				glMatrixMode(GL_MODELVIEW);
 				glViewport(0,0,SCREENWIDTH, SCREENHEIGHT);
-			break;
-
+			break;			
+		
 			case SDL_QUIT:
 				hasQuit = true;
 				break;
 		}
+		
 	}
 }
 
@@ -166,7 +174,43 @@ void draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//Draw two parts: A small gui for generating/solving/stopping puzzles, and the state of the current puzzle
+	
+	//Draws the current board
 	gameBoard->draw();
-
+	
+	//Draws the pieces on the board
+	
+	//Draws the board controls
+		//Draw the 'Randomize' die
+			//Black outline
+			glColor3f(0.0f, 0.0f, 0.0f);
+			RicochetRobots::Primitives::drawSquare(0, SCREENHEIGHT - 32, 32, 32);
+			
+			//White fill
+			glColor3f(1.0f, 1.0f, 1.0f);
+			RicochetRobots::Primitives::drawSquare(1, SCREENHEIGHT - 31, 30, 30);
+			
+			//Black dice dots
+			glColor3f(0.0f, 0.0f, 0.0f);
+			RicochetRobots::Primitives::drawCircle(8,  SCREENHEIGHT - 24, 3, 12);
+			RicochetRobots::Primitives::drawCircle(24, SCREENHEIGHT - 24, 3, 12);
+			RicochetRobots::Primitives::drawCircle(8,  SCREENHEIGHT - 16, 3, 12);
+			RicochetRobots::Primitives::drawCircle(24, SCREENHEIGHT - 16, 3, 12);
+			RicochetRobots::Primitives::drawCircle(8,  SCREENHEIGHT - 8,  3, 12);
+			RicochetRobots::Primitives::drawCircle(24, SCREENHEIGHT - 8,  3, 12);
+		
+		//Draw the 'Solve' arrow
+			glColor3f(0.0f, 1.0f, 0.0f);
+			RicochetRobots::Primitives::drawTriangle(38, SCREENHEIGHT - 28, 60, SCREENHEIGHT - 16, 38, SCREENHEIGHT - 4);
+			
+		//Draw the 'Stop' octagon
+			glColor3f(1.0f, 0.0f, 0.0f);
+			RicochetRobots::Primitives::drawOctagon(64, SCREENHEIGHT - 32, 32, 32);
+		
+	//Draw the countdown clock
+	glColor3f(0.0f, 1.0f, 0.0f);
+	GLNumbers::drawTime( SCREENWIDTH - 144, SCREENHEIGHT - 32, 12, 28, testTimer.getTicks() );
+	
 	SDL_GL_SwapBuffers();
 }

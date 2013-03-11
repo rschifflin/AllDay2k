@@ -17,7 +17,7 @@ private:
 	bool	 m_isLive; //Whether or not the timer is active
 
 public:
-	Timer() : m_ticks(0), m_startTicks(0), m_isLive(true) {}
+	Timer() : m_ticks(0), m_startTicks(0), m_isLive(false) {}
 
 	void start();
 	void stop();

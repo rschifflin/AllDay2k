@@ -37,7 +37,7 @@ namespace RicochetRobots
 		{
 		/*case 0:*/
 		default:
-
+		case 0:
 			m_gridA[0][1].isOpenE = false;
 			m_gridA[0][2].isOpenW = false;
 			m_gridA[0][3].isOpenS = false;
@@ -111,6 +111,236 @@ namespace RicochetRobots
 			m_gridB[7][7].isOpenN = false;
 
 			break;
+		case 1:
+			m_gridA[0][1].isOpenE = false;
+			m_gridA[0][2].isOpenW = false;
+			m_gridA[0][4].isOpenS = false;
+
+			m_gridA[1][4].isOpenN = false;
+			m_gridA[1][4].isOpenE = false;
+			m_gridA[1][4].goalPiece = GREENCIRCLE;
+			m_gridA[1][5].isOpenW = false;
+
+			
+			m_gridA[3][0].isOpenE = false;
+			
+			m_gridA[3][1].isOpenW = false;
+			m_gridA[3][1].isOpenS = false;
+			m_gridA[3][1].goalPiece = REDTRIANGLE;
+			
+			m_gridA[4][1].isOpenN = false;
+			m_gridA[4][5].isOpenS = false;
+			
+			m_gridA[5][0].isOpenS = false;
+			m_gridA[5][4].isOpenE = false;
+			m_gridA[5][5].isOpenW = false;
+			m_gridA[5][5].isOpenN = false;
+			m_gridA[5][5].goalPiece = YELLOWSQUARE;
+			
+			m_gridA[6][0].isOpenN = false;
+			m_gridA[6][3].isOpenS = false;
+			m_gridA[6][3].isOpenE = false;
+			m_gridA[6][3].goalPiece = BLUEDIAMOND;
+			m_gridA[6][4].isOpenW = false;
+			m_gridA[6][7].isOpenS = false;
+			
+			m_gridA[7][3].isOpenN = false;
+			m_gridA[7][6].isOpenE = false;
+			m_gridA[7][7].isOpenW = false;
+			m_gridA[7][7].isOpenN = false;
+				
+			m_gridB[0][4].isOpenE = false;
+			m_gridB[0][5].isOpenW = false;
+			
+			m_gridB[1][4].bumper = BLUEBACKWARD;
+
+			m_gridB[2][0].isOpenS = false;	
+			m_gridB[2][6].isOpenE = false;			
+			m_gridB[2][6].isOpenS = false;
+			m_gridB[2][6].goalPiece = BLUEDIAMOND;
+			m_gridB[2][7].isOpenW = false;
+
+			m_gridB[3][0].isOpenN = false;
+			m_gridB[3][2].isOpenS = false;
+			m_gridB[3][6].isOpenN = false;
+			m_gridB[3][6].bumper = YELLOWBACKWARD;
+
+			m_gridB[4][2].isOpenN = false;
+			m_gridB[4][2].isOpenE = false;
+			m_gridB[4][2].goalPiece = GREENCIRCLE;
+			m_gridB[4][3].isOpenW = false;
+			m_gridB[4][3].isOpenS = false;
+			m_gridB[4][3].goalPiece = REDTRIANGLE;
+
+			m_gridB[5][3].isOpenN = false;
+			m_gridB[5][5].isOpenS = false;
+
+			m_gridB[6][4].isOpenE = false;
+			m_gridB[6][5].isOpenW = false;
+			m_gridB[6][5].isOpenN = false;
+			m_gridB[6][5].goalPiece = YELLOWSQUARE;
+			m_gridB[6][7].isOpenS = false;
+
+			m_gridB[7][6].isOpenE = false;
+			m_gridB[7][7].isOpenN = false;
+			m_gridB[7][7].isOpenW = false;
+			break;
+		case 2:
+			m_gridA[0][5].isOpenE = false;
+			m_gridA[0][6].isOpenW = false;
+
+			m_gridA[1][3].isOpenS = false;
+		
+			m_gridA[2][2].isOpenE = false;
+			m_gridA[2][3].isOpenW = false;
+			m_gridA[2][3].isOpenN = false;
+			m_gridA[2][3].goalPiece = YELLOWCIRCLE;
+
+			m_gridA[3][0].isOpenS = false;			
+			m_gridA[3][2].isOpenS = false;
+			m_gridA[3][4].isOpenE = false;
+			m_gridA[3][5].isOpenW = false;
+			m_gridA[3][5].isOpenS = false;
+			m_gridA[3][5].goalPiece = BLUETRIANGLE;
+			
+			m_gridA[4][0].isOpenN = false;
+			m_gridA[4][2].isOpenN = false;
+			m_gridA[4][2].isOpenE = false;
+			m_gridA[4][2].goalPiece = REDSQUARE;
+			m_gridA[4][3].isOpenW = false;
+			m_gridA[4][5].isOpenN = false;
+			
+			m_gridA[5][4].isOpenE = false;
+			m_gridA[5][4].isOpenS = false;
+			m_gridA[5][4].goalPiece = GREENDIAMOND;
+			m_gridA[5][5].isOpenW = false;
+			
+			m_gridA[6][4].isOpenN = false;
+			m_gridA[6][7].isOpenS = false;
+			
+			m_gridA[7][6].isOpenE = false;
+			m_gridA[7][7].isOpenW = false;
+			m_gridA[7][7].isOpenN = false;
+
+			m_gridB[0][2].isOpenE = false;
+			m_gridB[0][3].isOpenW = false;
+
+			m_gridB[1][2].bumper = BLUEFORWARD;
+			m_gridB[1][6].isOpenS = false;			
+
+			m_gridB[2][5].isOpenS = false;
+			m_gridB[2][5].isOpenE = false;
+			m_gridB[2][5].goalPiece = GREENDIAMOND;
+			m_gridB[2][6].isOpenN = false;
+			m_gridB[2][6].isOpenW = false;
+			m_gridB[2][6].goalPiece = YELLOWCIRCLE;
+						
+			m_gridB[3][5].isOpenN = false;
+			
+			m_gridB[4][7].bumper = REDBACKWARD;
+			
+			m_gridB[5][0].isOpenE = false;
+			m_gridB[5][1].isOpenW = false;
+			m_gridB[5][1].isOpenS = false;
+			m_gridB[5][1].goalPiece = REDSQUARE;
+			
+			m_gridB[6][0].isOpenS = false;
+			m_gridB[6][1].isOpenN = false;
+			m_gridB[6][4].isOpenS = false;
+			m_gridB[6][7].isOpenS = false;
+			
+			m_gridB[7][0].isOpenN = false;
+			m_gridB[7][4].isOpenN = false;
+			m_gridB[7][4].isOpenE = false;
+			m_gridB[7][4].goalPiece = BLUETRIANGLE;
+			m_gridB[7][5].isOpenW = false;
+			m_gridB[7][6].isOpenE = false;
+			m_gridB[7][7].isOpenW = false;
+			m_gridB[7][7].isOpenN = false;
+			break;
+
+		case 3:
+			m_gridA[0][2].isOpenE = false;
+			m_gridA[0][3].isOpenW = false;
+
+			m_gridA[1][4].isOpenE = false;
+			m_gridA[1][5].isOpenW = false;
+			m_gridA[1][5].isOpenS = false;
+			m_gridA[1][5].goalPiece = BLUECIRCLE;
+		
+			m_gridA[2][5].isOpenN = false;
+			m_gridA[2][7].isOpenS = false;
+			m_gridA[2][7].isOpenE = false;
+			m_gridA[2][7].goalPiece = VORTEX;
+
+			m_gridA[3][0].isOpenS = false;			
+			m_gridA[3][7].isOpenN = false;			
+			
+			m_gridA[4][0].isOpenN = false;
+			m_gridA[4][3].isOpenE = false;
+			m_gridA[4][3].isOpenS = false;
+			m_gridA[4][3].goalPiece = REDDIAMOND;
+			m_gridA[4][4].isOpenW = false;
+			m_gridA[4][6].isOpenS = false;
+			
+			m_gridA[5][1].isOpenS = false;
+			m_gridA[5][3].isOpenN = false;
+			m_gridA[5][5].isOpenE = false;
+			m_gridA[5][6].isOpenW = false;
+			m_gridA[5][6].isOpenN = false;
+			m_gridA[5][6].goalPiece = GREENSQUARE;
+			
+			m_gridA[6][1].isOpenN = false;
+			m_gridA[6][1].isOpenE = false;
+			m_gridA[6][1].goalPiece = YELLOWTRIANGLE;
+			m_gridA[6][2].isOpenW = false;
+			m_gridA[6][7].isOpenS = false;
+			
+			m_gridA[7][6].isOpenE = false;
+			m_gridA[7][7].isOpenW = false;
+			m_gridA[7][7].isOpenN = false;
+
+			m_gridB[0][4].isOpenE = false;
+			m_gridB[0][5].isOpenW = false;
+
+			m_gridB[1][2].bumper = REDBACKWARD;
+			m_gridB[1][6].isOpenS = false;			
+
+			m_gridB[2][2].isOpenS = false;
+			m_gridB[2][5].isOpenE = false;
+			m_gridB[2][6].isOpenN = false;
+			m_gridB[2][6].isOpenW = false;
+			m_gridB[2][6].goalPiece = YELLOWTRIANGLE;
+						
+			m_gridB[3][2].isOpenN = false;
+			m_gridB[3][2].isOpenE = false;
+			m_gridB[3][2].goalPiece = BLUECIRCLE;
+			m_gridB[3][3].isOpenW = false;
+			m_gridB[3][3].isOpenS = false;
+			m_gridB[3][3].goalPiece = GREENSQUARE;
+			
+			m_gridB[4][3].isOpenN = false;
+			
+			m_gridB[5][1].isOpenE = false;
+			m_gridB[5][1].isOpenS = false;
+			m_gridB[5][1].goalPiece = REDDIAMOND;
+			m_gridB[5][2].isOpenW = false;
+			
+			m_gridB[6][0].isOpenS = false;
+			m_gridB[6][1].isOpenN = false;
+			m_gridB[6][3].bumper = GREENBACKWARD;
+			m_gridB[6][7].isOpenS = false;
+			
+			m_gridB[7][0].isOpenN = false;
+			m_gridB[7][5].isOpenE = false;
+			m_gridB[7][5].isOpenS = false;
+			m_gridB[7][5].goalPiece = VORTEX;
+			m_gridB[7][6].isOpenW = false;
+			m_gridB[7][6].isOpenE = false;
+			m_gridB[7][7].isOpenW = false;
+			m_gridB[7][7].isOpenN = false;
+				
+			break;	
 		} //End switch(type)
 
 		m_isFront = true;
@@ -267,11 +497,11 @@ namespace RicochetRobots
 	void Board::createBoard(unsigned int seed)
 	{
 		if (seed == 0)
-			m_seed = (unsigned int)time(NULL);
+			m_seed = time(NULL);
 		else
 			m_seed = seed;
 
-		srand( seed );
+		srand(m_seed);
 		m_buildGrid();
 	}
 
@@ -353,19 +583,83 @@ namespace RicochetRobots
 				case GREENTRIANGLE:
 					glColor3f(0.0f	, 1.0f	, 0.0f	);
 					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
+					break;			
+				case GREENCIRCLE:
+					glColor3f(0.0f	, 1.0f	, 0.0f);
+					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/2), 24);
+					break;
+				case GREENDIAMOND:
+					glColor3f(0.0f	, 1.0f	, 0.0f);
+					Primitives::drawDiamond(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					break;
+				case GREENSQUARE:
+					glColor3f(0.0f	, 1.0f	, 0.0f);	
+					Primitives::drawSquare(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					break;
+
+				case YELLOWTRIANGLE:
+					glColor3f(1.0f	, 0.847f, 0.0f	);
+					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
+					break;			
+				case YELLOWCIRCLE:	
+					glColor3f(1.0f	, 0.847f, 0.0f	);
+					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/2), 24);
 					break;
 				case YELLOWDIAMOND:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
 					Primitives::drawDiamond(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
 					break;
-				case REDCIRCLE:
-					glColor3f(1.0f	, 0.0f	, 0.0f);
+				case YELLOWSQUARE:	
+					glColor3f(1.0f	, 0.847f, 0.0f	);
+					Primitives::drawSquare(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					break;				
+					
+				case BLUETRIANGLE:
+					glColor3f(0.0f	, 0.0f	, 1.0f	);
+					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
+					break;			
+				case BLUECIRCLE:	
+					glColor3f(0.0f	, 0.0f	, 1.0f	);
 					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/2), 24);
 					break;
-				case BLUESQUARE:
+				case BLUEDIAMOND:
+					glColor3f(0.0f	, 0.0f	, 1.0f	);
+					Primitives::drawDiamond(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					break;
+				case BLUESQUARE:	
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
 					Primitives::drawSquare(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
 					break;
+	
+				case REDTRIANGLE:
+					glColor3f(1.0f	, 0.0f	, 0.0f	);
+					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
+					break;			
+				case REDCIRCLE:	
+					glColor3f(1.0f	, 0.0f	, 0.0f	);
+					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/2), 24);
+					break;
+				case REDDIAMOND:
+					glColor3f(1.0f	, 0.0f	, 0.0f	);
+					Primitives::drawDiamond(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					break;
+				case REDSQUARE:	
+					glColor3f(1.0f	, 0.0f	, 0.0f	);
+					Primitives::drawSquare(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					break;
+
+				case VORTEX:
+					glColor3f(1.0f	, 0.0f	, 0.0f	);
+					Primitives::drawCircle(pxSize*j + (pxSize/3), pxSize*i + (pxSize/3), (pxSize/6), 24);
+					glColor3f(0.0f	, 1.0f	, 0.0f	);
+					Primitives::drawCircle(pxSize*j + (pxSize * 2/3), pxSize*i + (pxSize/3), (pxSize/6), 24);
+					glColor3f(0.0f	, 0.0f	, 1.0f	);
+					Primitives::drawCircle(pxSize*j + (pxSize * 2/3), pxSize*i + (pxSize * 2/3), (pxSize/6), 24);
+					glColor3f(1.0f	, 0.847f, 0.0f	);
+					Primitives::drawCircle(pxSize*j + (pxSize/3), pxSize*i + (pxSize * 2/3), (pxSize/6), 24);
+					break;
+
+					
 				}
 
 				switch (m_grid[i][j].bumper)
@@ -382,14 +676,28 @@ namespace RicochetRobots
 					glColor3f(0.0f	, 1.0f	, 0.0f	);
 					Primitives::drawBackwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
 					break;
-
 				case YELLOWFORWARD:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
 					Primitives::drawForwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
 					break;
-
 				case YELLOWBACKWARD:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
+					Primitives::drawBackwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					break;
+				case BLUEFORWARD:
+					glColor3f(0.0f	, 0.0f	, 1.0f	);
+					Primitives::drawForwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					break;
+				case BLUEBACKWARD:
+					glColor3f(0.0f	, 0.0f	, 1.0f	);
+					Primitives::drawBackwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					break;
+				case REDFORWARD:
+					glColor3f(1.0f	, 0.0f	, 0.0f	);
+					Primitives::drawForwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					break;
+				case REDBACKWARD:
+					glColor3f(1.0f	, 0.0f	, 0.0f	);
 					Primitives::drawBackwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
 					break;
 				}
@@ -400,28 +708,59 @@ namespace RicochetRobots
 
 	void Board::m_buildGrid()
 	{
-		SubBoard sub;
-		sub.loadType(0);
-
-		sub.back();
-		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
-				m_grid[i][j] = sub.get(i,j);
-			
-		sub.rotate90();
-		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
-				m_grid[i + BOARDSIZE/2][j] = sub.get(i,j);
+		SubBoard sub1, sub2, sub3, sub4;	
 		
-	
-		sub.rotate270();
-		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
-				m_grid[i][j + BOARDSIZE/2] = sub.get(i,j);
+		//Randomize the directions: 0,90,180,270
+		int choices[4] = {1, 2, 3, 4};
+		for (int size = 4; size > 0; size--)
+		{
+			int pick = rand() % size;
 			
-		sub.rotate180();
+			switch (choices[pick])
+			{
+				case 1:	sub1.loadType(4 - size);
+					break;
+				case 2: sub2.loadType(4 - size);
+					break;
+				case 3: sub3.loadType(4 - size);
+					break;
+				case 4: sub4.loadType(4 - size);
+					break;
+			}
+
+			//Swap the chosen value with the 'tail' of the list
+			choices[pick] = choices[3 - (4 - size)];
+		}
+	
+		//Randomize each piece: front or back
+		if ( rand() % 2 == 0)
+			sub1.back();
+		if ( rand() % 2 == 0)
+			sub2.back();
+		if ( rand() % 2 == 0)
+			sub3.back();
+		if ( rand() % 2 == 0)
+			sub4.back();
+
+		//Build the grid	
 		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
 			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
-				m_grid[i + BOARDSIZE/2][j + BOARDSIZE/2] = sub.get(i,j);
+				m_grid[i][j] = sub1.get(i,j);
+		
+
+		sub2.rotate90();
+		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				m_grid[i + BOARDSIZE/2][j] = sub2.get(i,j);
+		
+		sub3.rotate270();
+		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				m_grid[i][j + BOARDSIZE/2] = sub3.get(i,j);
+		
+		sub4.rotate180();
+		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
+			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				m_grid[i + BOARDSIZE/2][j + BOARDSIZE/2] = sub4.get(i,j);
 	}
 } //End Namespace
