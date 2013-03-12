@@ -8,7 +8,7 @@
 namespace RicochetRobots
 {
 	namespace Primitives
-	{
+	{	
 		inline void drawSquare(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
@@ -46,6 +46,24 @@ namespace RicochetRobots
 
 		}
 
+		inline void drawRing(int cx, int cy, int r, int nVertices, int thickness)
+		{		
+			glEnable(GL_STENCIL_TEST);
+				//Write the inner circle to the stencil buffer
+				glColorMask(0,0,0,0);
+				glStencilFunc(GL_ALWAYS, 1, 1);
+				glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+				drawCircle(cx, cy, r - thickness, nVertices);
+
+				//Use the stencil buffer to block out the inner circle
+				glColorMask(1,1,1,1);
+				glStencilFunc(GL_NOTEQUAL, 1, 1);
+				glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+				drawCircle(cx, cy, r, nVertices);	
+			glDisable(GL_STENCIL_TEST);
+		}
+	
+
 		inline void drawDiamond(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
@@ -59,9 +77,9 @@ namespace RicochetRobots
 		inline void drawTriangle(int x, int y, int b, int h)
 		{
 			glBegin(GL_TRIANGLES);
-				glVertex2i(x + b/2	, y		);
-				glVertex2i(x + b	, y + h	);
-				glVertex2i(x		, y + h	);
+				glVertex2i(x + b/2 , y	   );
+				glVertex2i(x + b   , y + h );
+				glVertex2i(x	   , y + h );
 			glEnd();
 		}
 		
@@ -77,19 +95,19 @@ namespace RicochetRobots
 		inline void drawForwardSlash(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
-				glVertex2i(x + (int)(w * 0.75)	, y		);
-				glVertex2i(x + w				, y		);
+				glVertex2i(x + (int)(w * 0.75)	, y	);
+				glVertex2i(x + w		, y	);
 				glVertex2i(x + (int)(w * 0.25)	, y + h	);
-				glVertex2i(x					, y + h	);
+				glVertex2i(x			, y + h	);
 			glEnd();
 		}
 
 		inline void drawBackwardSlash(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
-				glVertex2i(x					, y		);
-				glVertex2i(x + (int)(w * 0.25)	, y		);
-				glVertex2i(x + w				, y + h	);
+				glVertex2i(x			, y	);
+				glVertex2i(x + (int)(w * 0.25)	, y	);
+				glVertex2i(x + w		, y + h	);
 				glVertex2i(x + (int)(w * 0.75)	, y + h	);
 			glEnd();
 		}
@@ -97,14 +115,14 @@ namespace RicochetRobots
 		inline void drawOctagon(int x, int y, int w, int h)
 		{
 			glBegin(GL_POLYGON);
-				glVertex2i(x + (int)(w * 0.293)	, y						);
-				glVertex2i(x + (int)(w * 0.707)	, y						);
-				glVertex2i(x + w				, y + (int)(h * 0.293)	);
-				glVertex2i(x + w				, y + (int)(h * 0.707)	);
-				glVertex2i(x + (int)(w * 0.707)	, y	+ h					);
-				glVertex2i(x + (int)(w * 0.293)	, y	+ h					);
-				glVertex2i(x 					, y + (int)(h * 0.707)	);
-				glVertex2i(x 					, y + (int)(h * 0.293)	);
+				glVertex2i(x + (int)(w * 0.293)	, y			);
+				glVertex2i(x + (int)(w * 0.707)	, y			);
+				glVertex2i(x + w		, y + (int)(h * 0.293)	);
+				glVertex2i(x + w		, y + (int)(h * 0.707)	);
+				glVertex2i(x + (int)(w * 0.707)	, y	+ h		);
+				glVertex2i(x + (int)(w * 0.293)	, y	+ h		);
+				glVertex2i(x 			, y + (int)(h * 0.707)	);
+				glVertex2i(x 			, y + (int)(h * 0.293)	);
 			glEnd();
 		}
 		

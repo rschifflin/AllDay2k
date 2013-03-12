@@ -1,9 +1,9 @@
 CC = clang++
-CFLAGS = -Weverything -o
+CFLAGS = -Weverything -g 
 CLIBS = -lSDL -lGL
 
 Solver.exe : main.o Board.o Timer.o GLNumbers.o GUI.o 
-	$(CC) $(CFLAGS) $@ main.o Board.o Timer.o GLNumbers.o GUI.o $(CLIBS)
+	$(CC) $(CFLAGS) -o $@ main.o Board.o Timer.o GLNumbers.o GUI.o $(CLIBS)
 
 main.o : main.cpp Board.hpp Timer.hpp Primitives.hpp GLNumbers.hpp GUI.hpp
 	$(CC) -c main.cpp

@@ -112,6 +112,7 @@ int SDLInit()
 	}
 
 	//SDL_putenv("SDL_VIDEO_CENTERED=center");
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1); //Ask for a stencil buffer
 	if (SDL_SetVideoMode(SCREENWIDTH, SCREENHEIGHT, 32, SDL_OPENGL | SDL_RESIZABLE ) == NULL)
 	{
 		//std::cout << "Error opening screen" << std::endl;
@@ -128,15 +129,11 @@ int OpenGLInit()
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
 	glOrtho(0.0,SCREENWIDTH,SCREENHEIGHT,0.0,101.0,-101.0);
-
-	glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);	
 	glViewport(0,0,SCREENWIDTH,SCREENHEIGHT);
 
-	//GLubyte colorFade4[3] = {193, 203, 217};
-	glClearColor((GLclampf)1, (GLclampf)1, (GLclampf)1, 1.0);
-	//glEnable( GL_TEXTURE_2D );
-	//glEnable( GL_BLEND );
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glClearColor((GLclampf)1, (GLclampf)1, (GLclampf)1, 1.0); //Set color buffer clear value to white
+	glClearStencil(0);  //Set stencil buffer clear value to 0
 
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR)
@@ -213,7 +210,7 @@ void handleInput()
 
 void draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	//Draw two parts: A small gui for generating/solving/stopping puzzles, and the state of the current puzzle
 	

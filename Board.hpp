@@ -73,6 +73,15 @@ namespace RicochetRobots
 		YELLOWBACKWARD
 	};
 
+	struct Robots
+	{
+		unsigned char greenPos;
+		unsigned char yellowPos;
+		unsigned char bluePos;
+		unsigned char redPos;		
+		unsigned char blackPos;
+	};
+
 	struct Square
 	{
 		bool isOpenN;
@@ -116,8 +125,10 @@ namespace RicochetRobots
 	class Board
 	{
 		unsigned int m_seed;
+
 		Square m_grid[BOARDSIZE][BOARDSIZE];
-		
+		Robots m_robots;
+
 		int pxSize;
 		void m_buildGrid(); //Sets m_grid to the four combined boards
 	public:

@@ -573,6 +573,33 @@ namespace RicochetRobots
 					
 				glEnd();
 
+				//Draw robots
+				unsigned char xpos, ypos;
+
+				xpos = m_robots.greenPos & 0xF0;
+				xpos = xpos >> 4;
+				ypos = m_robots.greenPos & 0x0F;
+				glColor3f(0.0f	, 1.0f	, 0.0f);
+				Primitives::drawRing(pxSize*xpos + (pxSize/2), pxSize*ypos + (pxSize/2), (pxSize/2), 24, 4);
+
+				xpos = m_robots.yellowPos & 0xF0;
+				xpos = xpos >> 4;
+				ypos = m_robots.yellowPos & 0x0F;
+				glColor3f(1.0f	, 0.847f, 0.0f);
+				Primitives::drawRing(pxSize*xpos + (pxSize/2), pxSize*ypos + (pxSize/2), (pxSize/2), 24, 4);
+
+				xpos = m_robots.bluePos & 0xF0;
+				xpos = xpos >> 4;
+				ypos = m_robots.bluePos & 0x0F;
+				glColor3f(0.0f	, 0.0f	, 1.0f);
+				Primitives::drawRing(pxSize*xpos + (pxSize/2), pxSize*ypos + (pxSize/2), (pxSize/2), 24, 4);
+				
+				xpos = m_robots.redPos & 0xF0;
+				xpos = xpos >> 4;
+				ypos = m_robots.redPos & 0x0F;
+				glColor3f(1.0f	, 0.0f	, 0.0f);
+				Primitives::drawRing(pxSize*xpos + (pxSize/2), pxSize*ypos + (pxSize/2), (pxSize/2), 24, 4);
+
 				//Draw pieces
 				switch (m_grid[i][j].goalPiece)
 				{
@@ -581,71 +608,71 @@ namespace RicochetRobots
 				
 					break;
 				case GREENTRIANGLE:
-					glColor3f(0.0f	, 1.0f	, 0.0f	);
-					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
+					glColor3f(0.0f	, 1.0f	, 0.0f);
+					Primitives::drawTriangle(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;			
 				case GREENCIRCLE:
 					glColor3f(0.0f	, 1.0f	, 0.0f);
-					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/2), 24);
+					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/4), 12);
 					break;
 				case GREENDIAMOND:
 					glColor3f(0.0f	, 1.0f	, 0.0f);
-					Primitives::drawDiamond(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					Primitives::drawDiamond(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;
 				case GREENSQUARE:
 					glColor3f(0.0f	, 1.0f	, 0.0f);	
-					Primitives::drawSquare(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					Primitives::drawSquare(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;
 
 				case YELLOWTRIANGLE:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
+					Primitives::drawTriangle(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;			
 				case YELLOWCIRCLE:	
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/2), 24);
+					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/4), 12);
 					break;
 				case YELLOWDIAMOND:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawDiamond(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					Primitives::drawDiamond(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;
 				case YELLOWSQUARE:	
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawSquare(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					Primitives::drawSquare(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;				
 					
 				case BLUETRIANGLE:
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
+					Primitives::drawTriangle(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;			
 				case BLUECIRCLE:	
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/2), 24);
+					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/4), 12);
 					break;
 				case BLUEDIAMOND:
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawDiamond(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					Primitives::drawDiamond(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;
 				case BLUESQUARE:	
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawSquare(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					Primitives::drawSquare(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;
 	
 				case REDTRIANGLE:
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawTriangle(pxSize*j + 2, pxSize*i + 2,pxSize - 4,pxSize - 4);
+					Primitives::drawTriangle(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;			
 				case REDCIRCLE:	
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/2), 24);
+					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/4), 12);
 					break;
 				case REDDIAMOND:
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawDiamond(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					Primitives::drawDiamond(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;
 				case REDSQUARE:	
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawSquare(pxSize*j + 2,pxSize*i + 2,pxSize- 4,pxSize- 4);
+					Primitives::drawSquare(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
 					break;
 
 				case VORTEX:
@@ -741,6 +768,71 @@ namespace RicochetRobots
 			sub3.back();
 		if ( rand() % 2 == 0)
 			sub4.back();
+		
+		//Randomize each robot's starting position
+		/*
+			[q1][q2]
+			[q3][q4]
+		char q = 0x 0000 0000
+		            ____ ____
+			    xpos ypos
+		*/
+		unsigned char q[4] = {0, 0, 0, 0};
+		unsigned char xpos, ypos;
+
+		//q1 ranges from (0,0) to (7,7), but excludes the (7,7) corner
+		xpos = rand() % 8;
+		(xpos == 7) ? ypos = rand() % 7 : ypos = rand() % 8;
+		q[0] = xpos;
+		q[0] = q[0] << 4;
+		q[0] += ypos;
+
+		//q2 ranges from (8,0) to (15,7), but excludes the (8,7) corner
+		xpos = rand() % 8 + 8;
+		(xpos == 8) ? ypos = rand() % 7 : ypos = rand() % 8;
+		q[1] = xpos;
+		q[1] = q[1] << 4;
+		q[1] += ypos;
+
+		//q3 ranges from (0,8) to (7,15), but excludes the (7,8) corner
+		xpos = rand() % 8;
+		(xpos == 7) ? ypos = rand() % 7 + 9 : ypos = rand() % 8 + 8;
+		q[2] = xpos;
+		q[2] = q[2] << 4;
+		q[2] += ypos;
+
+		//q4 ranges from (8,8) to (15,15), but excludes the (8,8) corner
+		xpos = rand() % 8 + 8;
+		(xpos == 8) ? ypos = rand() % 7 + 9 : ypos = rand() % 8 + 8;
+		q[3] = xpos;
+		q[3] = q[3] << 4;
+		q[3] += ypos;	
+	
+		choices[0] = 0;
+		choices[1] = 1;
+		choices[2] = 2;
+		choices[3] = 3;
+		for (int size = 4; size > 0; size--)
+		{
+			int pick = rand() % size;
+			switch (choices[pick])
+			{
+				case 0:
+					m_robots.redPos = q[4 - size];
+					break;
+				case 1:
+					m_robots.yellowPos = q[4 - size];
+					break;
+				case 2:
+					m_robots.greenPos = q[4 - size];
+					break;
+				case 3:
+					m_robots.bluePos = q[4 - size];
+					break;
+			};
+			choices[pick] = choices[3 - (4 - size)];
+		}
+		
 
 		//Build the grid	
 		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
