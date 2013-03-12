@@ -490,7 +490,7 @@ namespace RicochetRobots
 
 	Board::Board(unsigned int seed)
 	{
-		pxSize = 32;
+		m_pxSize = 32;
 		createBoard(seed);
 	}
 
@@ -520,55 +520,55 @@ namespace RicochetRobots
 				/*
 				glColor3f(1.0,1.0,1.0);
 				glBegin(GL_QUADS);
-					glVertex2i(16*i		,	16*j		);
-					glVertex2i(16*i + 16,	16*j		);
-					glVertex2i(16*i + 16,	16*j + 16	);
-					glVertex2i(16*i		,	16*j + 16	);
+					glVertex2i(16*i		, 16*j		);
+					glVertex2i(16*i + 16	, 16*j		);
+					glVertex2i(16*i + 16	, 16*j + 16	);
+					glVertex2i(16*i		, 16*j + 16	);
 				glEnd();
 				*/
 				
 				//Draw grid lines
 				glColor3f(0.75,0.75,0.75);
 				glBegin(GL_LINE_LOOP);
-					glVertex2i(pxSize*j			,	pxSize*i			);
-					glVertex2i(pxSize*j + pxSize,	pxSize*i			);
-					glVertex2i(pxSize*j + pxSize,	pxSize*i + pxSize	);
-					glVertex2i(pxSize*j			,	pxSize*i + pxSize	);
+					glVertex2i(m_pxSize*j		, m_pxSize*i		);
+					glVertex2i(m_pxSize*j + m_pxSize	, m_pxSize*i		);
+					glVertex2i(m_pxSize*j + m_pxSize	, m_pxSize*i + m_pxSize	);
+					glVertex2i(m_pxSize*j		, m_pxSize*i + m_pxSize	);
 				glEnd();
 				
 
 				//Draw walls
 				glColor3f(0.0,0.0,0.0);
 				glBegin(GL_LINE_LOOP);
-					glVertex2i(0					, 0					);
-					glVertex2i(BOARDSIZE * pxSize	, 0					);
-					glVertex2i(BOARDSIZE * pxSize	, BOARDSIZE * pxSize);
-					glVertex2i(0					, BOARDSIZE * pxSize);
+					glVertex2i(0			, 0			);
+					glVertex2i(BOARDSIZE * m_pxSize	, 0			);
+					glVertex2i(BOARDSIZE * m_pxSize	, BOARDSIZE * m_pxSize	);
+					glVertex2i(0			, BOARDSIZE * m_pxSize	);
 				glEnd();
 
 				glBegin(GL_LINES);
 					if (m_grid[i][j].isOpenN == false)
 					{
-						glVertex2i(pxSize*j			,	pxSize*i + 1		);
-						glVertex2i(pxSize*j + pxSize,	pxSize*i + 1		);
+						glVertex2i(m_pxSize*j		, m_pxSize*i + 1);
+						glVertex2i(m_pxSize*j + m_pxSize	, m_pxSize*i + 1);
 					}
 
 					if (m_grid[i][j].isOpenE == false)
 					{
-						glVertex2i(pxSize*j + pxSize - 1,	pxSize*i + pxSize	);
-						glVertex2i(pxSize*j	+ pxSize - 1,	pxSize*i			);
+						glVertex2i(m_pxSize*j + m_pxSize - 1, m_pxSize*i + m_pxSize	);
+						glVertex2i(m_pxSize*j + m_pxSize - 1, m_pxSize*i		);
 					}
 					
 					if (m_grid[i][j].isOpenS == false)
 					{
-						glVertex2i(pxSize*j			,	pxSize*i + pxSize - 1	);
-						glVertex2i(pxSize*j + pxSize,	pxSize*i + pxSize - 1	);
+						glVertex2i(m_pxSize*j		, m_pxSize*i + m_pxSize - 1	);
+						glVertex2i(m_pxSize*j + m_pxSize	, m_pxSize*i + m_pxSize - 1	);
 					}
 					
 					if (m_grid[i][j].isOpenW == false)
 					{
-						glVertex2i(pxSize*j + 1	,	pxSize*i			);
-						glVertex2i(pxSize*j + 1	,	pxSize*i + pxSize	);
+						glVertex2i(m_pxSize*j + 1	, m_pxSize*i		);
+						glVertex2i(m_pxSize*j + 1	, m_pxSize*i + m_pxSize	);
 					}
 					
 				glEnd();
@@ -580,25 +580,25 @@ namespace RicochetRobots
 				xpos = xpos >> 4;
 				ypos = m_robots.greenPos & 0x0F;
 				glColor3f(0.0f	, 1.0f	, 0.0f);
-				Primitives::drawRing(pxSize*xpos + (pxSize/2), pxSize*ypos + (pxSize/2), (pxSize/2), 24, 4);
+				Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
 
 				xpos = m_robots.yellowPos & 0xF0;
 				xpos = xpos >> 4;
 				ypos = m_robots.yellowPos & 0x0F;
 				glColor3f(1.0f	, 0.847f, 0.0f);
-				Primitives::drawRing(pxSize*xpos + (pxSize/2), pxSize*ypos + (pxSize/2), (pxSize/2), 24, 4);
+				Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
 
 				xpos = m_robots.bluePos & 0xF0;
 				xpos = xpos >> 4;
 				ypos = m_robots.bluePos & 0x0F;
 				glColor3f(0.0f	, 0.0f	, 1.0f);
-				Primitives::drawRing(pxSize*xpos + (pxSize/2), pxSize*ypos + (pxSize/2), (pxSize/2), 24, 4);
+				Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
 				
 				xpos = m_robots.redPos & 0xF0;
 				xpos = xpos >> 4;
 				ypos = m_robots.redPos & 0x0F;
 				glColor3f(1.0f	, 0.0f	, 0.0f);
-				Primitives::drawRing(pxSize*xpos + (pxSize/2), pxSize*ypos + (pxSize/2), (pxSize/2), 24, 4);
+				Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
 
 				//Draw pieces
 				switch (m_grid[i][j].goalPiece)
@@ -609,81 +609,81 @@ namespace RicochetRobots
 					break;
 				case GREENTRIANGLE:
 					glColor3f(0.0f	, 1.0f	, 0.0f);
-					Primitives::drawTriangle(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawTriangle(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;			
 				case GREENCIRCLE:
 					glColor3f(0.0f	, 1.0f	, 0.0f);
-					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/4), 12);
+					Primitives::drawCircle(m_pxSize*j + (m_pxSize/2), m_pxSize*i + (m_pxSize/2), (m_pxSize/4), 12);
 					break;
 				case GREENDIAMOND:
 					glColor3f(0.0f	, 1.0f	, 0.0f);
-					Primitives::drawDiamond(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawDiamond(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;
 				case GREENSQUARE:
 					glColor3f(0.0f	, 1.0f	, 0.0f);	
-					Primitives::drawSquare(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawSquare(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;
 
 				case YELLOWTRIANGLE:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawTriangle(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawTriangle(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;			
 				case YELLOWCIRCLE:	
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/4), 12);
+					Primitives::drawCircle(m_pxSize*j + (m_pxSize/2), m_pxSize*i + (m_pxSize/2), (m_pxSize/4), 12);
 					break;
 				case YELLOWDIAMOND:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawDiamond(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawDiamond(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;
 				case YELLOWSQUARE:	
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawSquare(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawSquare(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;				
 					
 				case BLUETRIANGLE:
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawTriangle(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawTriangle(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;			
 				case BLUECIRCLE:	
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/4), 12);
+					Primitives::drawCircle(m_pxSize*j + (m_pxSize/2), m_pxSize*i + (m_pxSize/2), (m_pxSize/4), 12);
 					break;
 				case BLUEDIAMOND:
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawDiamond(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawDiamond(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;
 				case BLUESQUARE:	
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawSquare(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawSquare(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;
 	
 				case REDTRIANGLE:
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawTriangle(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawTriangle(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;			
 				case REDCIRCLE:	
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize/2), pxSize*i + (pxSize/2), (pxSize/4), 12);
+					Primitives::drawCircle(m_pxSize*j + (m_pxSize/2), m_pxSize*i + (m_pxSize/2), (m_pxSize/4), 12);
 					break;
 				case REDDIAMOND:
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawDiamond(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawDiamond(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;
 				case REDSQUARE:	
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawSquare(pxSize*j + (pxSize / 4), pxSize*i + (pxSize / 4), (pxSize - 2*(pxSize / 4) ), (pxSize - 2*(pxSize/4)) );
+					Primitives::drawSquare(m_pxSize*j + (m_pxSize / 4), m_pxSize*i + (m_pxSize / 4), (m_pxSize - 2*(m_pxSize / 4) ), (m_pxSize - 2*(m_pxSize/4)) );
 					break;
 
 				case VORTEX:
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize/3), pxSize*i + (pxSize/3), (pxSize/6), 24);
+					Primitives::drawCircle(m_pxSize*j + (m_pxSize/3), m_pxSize*i + (m_pxSize/3), (m_pxSize/6), 24);
 					glColor3f(0.0f	, 1.0f	, 0.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize * 2/3), pxSize*i + (pxSize/3), (pxSize/6), 24);
+					Primitives::drawCircle(m_pxSize*j + (m_pxSize * 2/3), m_pxSize*i + (m_pxSize/3), (m_pxSize/6), 24);
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize * 2/3), pxSize*i + (pxSize * 2/3), (pxSize/6), 24);
+					Primitives::drawCircle(m_pxSize*j + (m_pxSize * 2/3), m_pxSize*i + (m_pxSize * 2/3), (m_pxSize/6), 24);
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawCircle(pxSize*j + (pxSize/3), pxSize*i + (pxSize * 2/3), (pxSize/6), 24);
+					Primitives::drawCircle(m_pxSize*j + (m_pxSize/3), m_pxSize*i + (m_pxSize * 2/3), (m_pxSize/6), 24);
 					break;
 
 					
@@ -697,35 +697,35 @@ namespace RicochetRobots
 					break;
 				case GREENFORWARD:
 					glColor3f(0.0f	, 1.0f	, 0.0f	);
-					Primitives::drawForwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					Primitives::drawForwardSlash(m_pxSize*j, m_pxSize*i, m_pxSize, m_pxSize);
 					break;
 				case GREENBACKWARD:
 					glColor3f(0.0f	, 1.0f	, 0.0f	);
-					Primitives::drawBackwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					Primitives::drawBackwardSlash(m_pxSize*j, m_pxSize*i, m_pxSize, m_pxSize);
 					break;
 				case YELLOWFORWARD:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawForwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					Primitives::drawForwardSlash(m_pxSize*j, m_pxSize*i, m_pxSize, m_pxSize);
 					break;
 				case YELLOWBACKWARD:
 					glColor3f(1.0f	, 0.847f, 0.0f	);
-					Primitives::drawBackwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					Primitives::drawBackwardSlash(m_pxSize*j, m_pxSize*i, m_pxSize, m_pxSize);
 					break;
 				case BLUEFORWARD:
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawForwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					Primitives::drawForwardSlash(m_pxSize*j, m_pxSize*i, m_pxSize, m_pxSize);
 					break;
 				case BLUEBACKWARD:
 					glColor3f(0.0f	, 0.0f	, 1.0f	);
-					Primitives::drawBackwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					Primitives::drawBackwardSlash(m_pxSize*j, m_pxSize*i, m_pxSize, m_pxSize);
 					break;
 				case REDFORWARD:
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawForwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					Primitives::drawForwardSlash(m_pxSize*j, m_pxSize*i, m_pxSize, m_pxSize);
 					break;
 				case REDBACKWARD:
 					glColor3f(1.0f	, 0.0f	, 0.0f	);
-					Primitives::drawBackwardSlash(pxSize*j, pxSize*i, pxSize, pxSize);
+					Primitives::drawBackwardSlash(m_pxSize*j, m_pxSize*i, m_pxSize, m_pxSize);
 					break;
 				}
 

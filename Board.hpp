@@ -129,7 +129,7 @@ namespace RicochetRobots
 		Square m_grid[BOARDSIZE][BOARDSIZE];
 		Robots m_robots;
 
-		int pxSize;
+		unsigned int m_pxSize;
 		void m_buildGrid(); //Sets m_grid to the four combined boards
 	public:
 		Board(unsigned int seed = 0); //Can specify a specific board if needed; 0 is a random board
