@@ -16,14 +16,20 @@
 #include "GLNumbers.hpp" //Draw numbers
 #include "Board.hpp" //Board object
 #include "Timer.hpp" //Timer object
+#include "GUI.hpp" //GUI objects
 //#include "Solver.hpp" //Solver object; requires setup(Board) before solving can begin; 
 
 int init();
 int SDLInit();
 int OpenGLInit();
+int GUIInit();
 
 void handleInput();
 void draw();
+
+//Hook functions for GUI
+void onClickRandomize();
+void drawRandomize(int xpos, int ypos, int w, int h);
 
 int SCREENWIDTH = 512;
 int SCREENHEIGHT = 548;
@@ -40,14 +46,12 @@ enum SolveMode
 } solveMode;
 
 RicochetRobots::Board* gameBoard = new RicochetRobots::Board();
+GUI::GUIManager* guiManager = new GUI::GUIManager;
 bool hasQuit = false;
-
 Timer testTimer;
-
 
 int main(int argc, char** argv)
 {
-	
 	if (init())
 		return 0;
 
@@ -93,6 +97,8 @@ int init()
 	if (SDLInit())
 		return 1;
 	if (OpenGLInit())
+		return 1;
+	if (GUIInit())
 		return 1;
 	return 0;
 }
@@ -142,6 +148,37 @@ int OpenGLInit()
 	return 0;
 }
 
+int GUIInit()
+{
+	guiManager->addButton("btnRandomize", 0, SCREENHEIGHT-32, 32, 32, onClickRandomize, drawRandomize);
+	return 0;
+}
+
+void onClickRandomize()
+{
+	gameBoard->createBoard();
+}
+
+void drawRandomize(int xpos, int ypos, int w, int h)
+{
+	//Draw the 'Randomize' die
+	//Black outline
+	glColor3f(0.0f, 0.0f, 0.0f);
+	RicochetRobots::Primitives::drawSquare(xpos, ypos, w, h);
+	
+	//White fill
+	glColor3f(1.0f, 1.0f, 1.0f);
+	RicochetRobots::Primitives::drawSquare(xpos+1, ypos+1, w-2, h-2);
+	
+	//Black dice dots
+	glColor3f(0.0f, 0.0f, 0.0f);
+	RicochetRobots::Primitives::drawCircle(xpos + (w/4  ),  ypos + (h/4  ),  3, 12);
+	RicochetRobots::Primitives::drawCircle(xpos + (w*3/4),  ypos + (h/4  ),  3, 12);
+	RicochetRobots::Primitives::drawCircle(xpos + (w/4  ),  ypos + (h/2  ),  3, 12);
+	RicochetRobots::Primitives::drawCircle(xpos + (w*3/4),  ypos + (h/2  ),  3, 12);
+	RicochetRobots::Primitives::drawCircle(xpos + (w/4  ),  ypos + (h*3/4),  3, 12);
+	RicochetRobots::Primitives::drawCircle(xpos + (w*3/4),  ypos + (h*3/4),  3, 12);
+}
 
 void handleInput()
 {
@@ -165,6 +202,10 @@ void handleInput()
 			case SDL_QUIT:
 				hasQuit = true;
 				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (m_eventInput.button.button == SDL_BUTTON_LEFT)
+					guiManager->handleMouse(m_eventInput.button.x, m_eventInput.button.y, true);
+				break;
 		}
 		
 	}
@@ -178,29 +219,11 @@ void draw()
 	
 	//Draws the current board
 	gameBoard->draw();
-	
+	guiManager->draw();
 	//Draws the pieces on the board
 	
 	//Draws the board controls
-		//Draw the 'Randomize' die
-			//Black outline
-			glColor3f(0.0f, 0.0f, 0.0f);
-			RicochetRobots::Primitives::drawSquare(0, SCREENHEIGHT - 32, 32, 32);
-			
-			//White fill
-			glColor3f(1.0f, 1.0f, 1.0f);
-			RicochetRobots::Primitives::drawSquare(1, SCREENHEIGHT - 31, 30, 30);
-			
-			//Black dice dots
-			glColor3f(0.0f, 0.0f, 0.0f);
-			RicochetRobots::Primitives::drawCircle(8,  SCREENHEIGHT - 24, 3, 12);
-			RicochetRobots::Primitives::drawCircle(24, SCREENHEIGHT - 24, 3, 12);
-			RicochetRobots::Primitives::drawCircle(8,  SCREENHEIGHT - 16, 3, 12);
-			RicochetRobots::Primitives::drawCircle(24, SCREENHEIGHT - 16, 3, 12);
-			RicochetRobots::Primitives::drawCircle(8,  SCREENHEIGHT - 8,  3, 12);
-			RicochetRobots::Primitives::drawCircle(24, SCREENHEIGHT - 8,  3, 12);
-		
-		//Draw the 'Solve' arrow
+	//Draw the 'Solve' arrow
 			glColor3f(0.0f, 1.0f, 0.0f);
 			RicochetRobots::Primitives::drawTriangle(38, SCREENHEIGHT - 28, 60, SCREENHEIGHT - 16, 38, SCREENHEIGHT - 4);
 			
