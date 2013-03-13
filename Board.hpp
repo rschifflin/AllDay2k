@@ -21,7 +21,7 @@ Methods
 	
 
 */
-
+#include "SDL/SDL_opengl.h"
 namespace RicochetRobots
 {
 
@@ -93,7 +93,7 @@ namespace RicochetRobots
 		Bumper bumper;
 	};
 
-	const unsigned int BOARDSIZE = 16;
+	const int BOARDSIZE = 16;
 
 	class SubBoard
 	{
@@ -107,11 +107,11 @@ namespace RicochetRobots
 		void m_assignGrid(); //Uses front flag and angle to set m_grid to the correct orientation
 
 	public:
-		SubBoard(unsigned int type = 0);
+		SubBoard(int type = 0);
 
 		Square get(unsigned int i, unsigned int j) { if (i < BOARDSIZE/2 && j < BOARDSIZE/2) return m_grid[i][j]; return m_grid[0][0]; }
 
-		void loadType(unsigned int type); //Creates one of four subboard types
+		void loadType(int type); //Creates one of four subboard types
 
 		void front() {if (!m_isFront) { m_isFront = true; m_assignGrid(); } }
 		void back() {if (m_isFront) { m_isFront = false; m_assignGrid(); } }
@@ -128,8 +128,9 @@ namespace RicochetRobots
 
 		Square m_grid[BOARDSIZE][BOARDSIZE];
 		Robots m_robots;
+		GoalPiece m_goal;
 
-		unsigned int m_pxSize;
+		GLint m_pxSize;
 		void m_buildGrid(); //Sets m_grid to the four combined boards
 	public:
 		Board(unsigned int seed = 0); //Can specify a specific board if needed; 0 is a random board

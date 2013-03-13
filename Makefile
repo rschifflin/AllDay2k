@@ -1,21 +1,21 @@
 CC = clang++
-CFLAGS = -Weverything -g 
+CFLAGS = -Weverything -Wno-padded -Wno-weak-vtables -g 
 CLIBS = -lSDL -lGL
 
 Solver.exe : main.o Board.o Timer.o GLNumbers.o GUI.o 
 	$(CC) $(CFLAGS) -o $@ main.o Board.o Timer.o GLNumbers.o GUI.o $(CLIBS)
 
 main.o : main.cpp Board.hpp Timer.hpp Primitives.hpp GLNumbers.hpp GUI.hpp
-	$(CC) -c main.cpp
+	$(CC) $(CFLAGS) -c main.cpp
 
 Board.o : Board.cpp Primitives.hpp
-	$(CC) -c Board.cpp
+	$(CC) $(CFLAGS) -c Board.cpp
 
 Timer.o: Timer.cpp
-	$(CC) -c Timer.cpp
+	$(CC) $(CFLAGS) -c Timer.cpp
 
 GLNumbers.o: GLNumbers.cpp
-	$(CC) -c GLNumbers.cpp
+	$(CC) $(CFLAGS) -c GLNumbers.cpp
 
 GUI.o: GUI.cpp
-	$(CC) -c GUI.cpp
+	$(CC) $(CFLAGS) -c GUI.cpp

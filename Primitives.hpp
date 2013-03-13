@@ -23,7 +23,7 @@ namespace RicochetRobots
 		inline void drawCircle(int cx, int cy, int r, int nVertices)
 		{
 			float theta = (2.0f * 3.14159f) / float(nVertices); // 2PI / numVertices
-			float tangent = tan(theta); //Distance moved tangential to the circle
+			float tangent = tanf(theta); //Distance moved tangential to the circle
 			float radiant = cosf(theta); //Distance moved toward the center of the circle
 
 			float x = (float)r;

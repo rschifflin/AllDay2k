@@ -9,11 +9,11 @@
 
 namespace GLNumbers
 {
-	void drawNumber(int xpos, int ypos, int charW, int charH, int number);
+	void drawNumber(int xpos, int ypos, int charW, int charH, unsigned int number);
 	
-	void drawDigit(int xpos, int ypos, int charW, int charH, int digit);
+	void drawDigit(int xpos, int ypos, int charW, int charH, unsigned int digit);
 	
-	void drawTime(int xpos, int ypos, int charW, int charH, int milliseconds);
+	void drawTime(int xpos, int ypos, int charW, int charH, unsigned int milliseconds);
 }
 
 

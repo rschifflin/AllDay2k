@@ -29,7 +29,11 @@ void draw();
 
 //Hook functions for GUI
 void onClickRandomize();
-void drawRandomize(int xpos, int ypos, int w, int h);
+void onClickSolve();
+void onClickStop();
+void drawRandomize(GLint xpos, GLint ypos, GLint w, GLint h);
+void drawSolve(GLint xpos, GLint ypos, GLint w, GLint h);
+void drawStop(GLint xpos, GLint ypos, GLint w, GLint h);
 
 int SCREENWIDTH = 512;
 int SCREENHEIGHT = 548;
@@ -45,46 +49,56 @@ enum SolveMode
 	FUTILE
 } solveMode;
 
-RicochetRobots::Board* gameBoard = new RicochetRobots::Board();
-GUI::GUIManager* guiManager = new GUI::GUIManager;
+Timer* testTimer = NULL;
+RicochetRobots::Board* gameBoard = NULL;
+GUI::GUIManager* guiManager = NULL;
 bool hasQuit = false;
-Timer testTimer;
 
-int main(int argc, char** argv)
+int main()
 {
 	if (init())
 		return 0;
-
-	testTimer.start();
 	Timer fps;
+	testTimer = new Timer();
+	gameBoard = new RicochetRobots::Board();
+
 	while (!hasQuit)
-	{
-		fps.start();
-		
-		switch (solveMode)
+	{	
+
+		if (solveMode == SOLVING)
 		{
-			default:
-			case UNSOLVED:
-				//In this mode, various keypresses set up the board's initial state
-				break;
-			
-			case SOLVED:
-				//In this mode, various keypresses navigate the board's solution
-				break;
-				
-			case FUTILE:
-				//In this mode, no solution was found
-				break;
+			//Don't draw updates, don't framecap; let the solver run at max speed, only handle input
+			handleInput();
 		}
-		
-		handleInput();
-		draw();
+		else
+		{
+			fps.start();
+			
+			switch (solveMode)
+			{
+				default:
+				case UNSOLVED:
+					//In this mode, various keypresses set up the board's initial state
+					break;
+				
+				case SOLVED:
+					//In this mode, various keypresses navigate the board's solution
+					break;
+					
+				case FUTILE:
+					//In this mode, no solution was found
+					break;
+			}
+			
+			handleInput();
+			draw();
 
-		uint32_t elapsed = fps.getTicks();
-		if (elapsed < MS_PER_FRAME )
-			SDL_Delay( MS_PER_FRAME - elapsed);
+			uint32_t elapsed = fps.getTicks();
+			if (elapsed < MS_PER_FRAME )
+				SDL_Delay( MS_PER_FRAME - elapsed);
 
-		fps.reset();
+			fps.reset();
+		}
 	}
 	
 	SDL_Quit();
@@ -147,16 +161,38 @@ int OpenGLInit()
 
 int GUIInit()
 {
+	if (guiManager)
+		delete guiManager;
+
+	guiManager = new GUI::GUIManager;
 	guiManager->addButton("btnRandomize", 0, SCREENHEIGHT-32, 32, 32, onClickRandomize, drawRandomize);
+	guiManager->addButton("btnSolve", 32, SCREENHEIGHT-32, 32, 32, onClickSolve, drawSolve);
+	guiManager->addButton("btnStop", 64, SCREENHEIGHT-32, 32, 32, onClickStop, drawStop);
 	return 0;
 }
 
 void onClickRandomize()
 {
-	gameBoard->createBoard();
+	if (gameBoard)
+		gameBoard->createBoard();
 }
 
-void drawRandomize(int xpos, int ypos, int w, int h)
+void onClickSolve()
+{
+	if (testTimer)
+		testTimer->start();	
+}
+
+void onClickStop()
+{
+	if (testTimer)
+	{
+		testTimer->stop();
+		testTimer->reset();
+	}
+}
+
+void drawRandomize(GLint xpos, GLint ypos, GLint w, GLint h)
 {
 	//Draw the 'Randomize' die
 	//Black outline
@@ -175,6 +211,20 @@ void drawRandomize(int xpos, int ypos, int w, int h)
 	RicochetRobots::Primitives::drawCircle(xpos + (w*3/4),  ypos + (h/2  ),  3, 12);
 	RicochetRobots::Primitives::drawCircle(xpos + (w/4  ),  ypos + (h*3/4),  3, 12);
 	RicochetRobots::Primitives::drawCircle(xpos + (w*3/4),  ypos + (h*3/4),  3, 12);
+}
+
+void drawSolve(GLint xpos, GLint ypos, GLint w, GLint h)
+{
+	//Draw the 'Solve' arrow
+	glColor3f(0.0f, 1.0f, 0.0f);
+	RicochetRobots::Primitives::drawTriangle(xpos, ypos, xpos + w, ypos + (h/2), xpos, ypos + h);
+}
+
+void drawStop(GLint xpos, GLint ypos, GLint w, GLint h)
+{
+	//Draw the 'Stop' octagon
+	glColor3f(1.0f, 0.0f, 0.0f);
+	RicochetRobots::Primitives::drawOctagon(xpos, ypos, w, h);
 }
 
 void handleInput()
@@ -211,26 +261,16 @@ void handleInput()
 void draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	//Draw two parts: A small gui for generating/solving/stopping puzzles, and the state of the current puzzle
 	
 	//Draws the current board
 	gameBoard->draw();
+
+	//Draws the gui
 	guiManager->draw();
-	//Draws the pieces on the board
-	
-	//Draws the board controls
-	//Draw the 'Solve' arrow
-			glColor3f(0.0f, 1.0f, 0.0f);
-			RicochetRobots::Primitives::drawTriangle(38, SCREENHEIGHT - 28, 60, SCREENHEIGHT - 16, 38, SCREENHEIGHT - 4);
-			
-		//Draw the 'Stop' octagon
-			glColor3f(1.0f, 0.0f, 0.0f);
-			RicochetRobots::Primitives::drawOctagon(64, SCREENHEIGHT - 32, 32, 32);
 		
 	//Draw the countdown clock
 	glColor3f(0.0f, 1.0f, 0.0f);
-	GLNumbers::drawTime( SCREENWIDTH - 144, SCREENHEIGHT - 32, 12, 28, testTimer.getTicks() );
+	GLNumbers::drawTime( SCREENWIDTH - 144, SCREENHEIGHT - 32, 12, 28, testTimer->getTicks() );
 	
 	SDL_GL_SwapBuffers();
 }

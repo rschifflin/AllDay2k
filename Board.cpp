@@ -1,20 +1,19 @@
 #include "Board.hpp"
-#include "SDL/SDL_opengl.h"
 #include <stdlib.h>
 #include <time.h>
 #include "Primitives.hpp"
 
 namespace RicochetRobots
 {
-	SubBoard::SubBoard(unsigned int type)
+	SubBoard::SubBoard(int type)
 	{
 		loadType(type);
 	}
 
-	void SubBoard::loadType(unsigned int type)
+	void SubBoard::loadType(int type)
 	{
-		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+		for (int i = 0; i < BOARDSIZE/2; i++)
+			for (int j = 0; j < BOARDSIZE/2; j++)
 			{
 				m_gridA[i][j].isOpenN = true;
 				m_gridA[i][j].isOpenE = true;
@@ -355,14 +354,14 @@ namespace RicochetRobots
 		{
 			if (m_angle == 0)
 			{
-				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				for (int i = 0; i < BOARDSIZE/2; i++)
+					for (int j = 0; j < BOARDSIZE/2; j++)
 						m_grid[i][j] = m_gridA[i][j];
 			}
 			else if (m_angle == 90)
 			{
-				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				for (int i = 0; i < BOARDSIZE/2; i++)
+					for (int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = j;
 						int v = BOARDSIZE/2 - 1 - i;
@@ -377,8 +376,8 @@ namespace RicochetRobots
 			}
 			else if (m_angle == 180)
 			{
-				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				for (int i = 0; i < BOARDSIZE/2; i++)
+					for (int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = BOARDSIZE/2 - 1 - i;
 						int v = BOARDSIZE/2 - 1 - j;
@@ -393,8 +392,8 @@ namespace RicochetRobots
 			}
 			else if (m_angle == 270)
 			{
-				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				for (int i = 0; i < BOARDSIZE/2; i++)
+					for (int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = BOARDSIZE/2 - 1 - j;
 						int v = i;
@@ -413,14 +412,14 @@ namespace RicochetRobots
 		{
 			if (m_angle == 0)
 			{
-				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				for (int i = 0; i < BOARDSIZE/2; i++)
+					for (int j = 0; j < BOARDSIZE/2; j++)
 						m_grid[i][j] = m_gridB[i][j];
 			}
 			else if (m_angle == 90)
 			{
-				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				for (int i = 0; i < BOARDSIZE/2; i++)
+					for (int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = j;
 						int v = BOARDSIZE/2 - 1 - i;
@@ -445,8 +444,8 @@ namespace RicochetRobots
 			}
 			else if (m_angle == 180)
 			{
-				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				for (int i = 0; i < BOARDSIZE/2; i++)
+					for (int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = BOARDSIZE/2 - 1 - i;
 						int v = BOARDSIZE/2 - 1 - j;
@@ -461,8 +460,8 @@ namespace RicochetRobots
 			}
 			else if (m_angle == 270)
 			{
-				for (unsigned int i = 0; i < BOARDSIZE/2; i++)
-					for (unsigned int j = 0; j < BOARDSIZE/2; j++)
+				for (int i = 0; i < BOARDSIZE/2; i++)
+					for (int j = 0; j < BOARDSIZE/2; j++)
 					{
 						int u = BOARDSIZE/2 - 1 - j;
 						int v = i;
@@ -497,7 +496,7 @@ namespace RicochetRobots
 	void Board::createBoard(unsigned int seed)
 	{
 		if (seed == 0)
-			m_seed = time(NULL);
+			m_seed = (unsigned int)time(NULL);
 		else
 			m_seed = seed;
 
@@ -513,8 +512,8 @@ namespace RicochetRobots
 
 	void Board::draw()
 	{
-		for (unsigned int i = 0; i < BOARDSIZE; i++)
-			for (unsigned int j = 0; j < BOARDSIZE; j++)
+		for (GLint i = 0; i < BOARDSIZE; i++)
+			for (GLint j = 0; j < BOARDSIZE; j++)
 			{
 				//Clear color is white, drawing white squares unneccesary
 				/*
@@ -531,8 +530,8 @@ namespace RicochetRobots
 				glColor3f(0.75,0.75,0.75);
 				glBegin(GL_LINE_LOOP);
 					glVertex2i(m_pxSize*j		, m_pxSize*i		);
-					glVertex2i(m_pxSize*j + m_pxSize	, m_pxSize*i		);
-					glVertex2i(m_pxSize*j + m_pxSize	, m_pxSize*i + m_pxSize	);
+					glVertex2i(m_pxSize*j + m_pxSize, m_pxSize*i		);
+					glVertex2i(m_pxSize*j + m_pxSize, m_pxSize*i + m_pxSize	);
 					glVertex2i(m_pxSize*j		, m_pxSize*i + m_pxSize	);
 				glEnd();
 				
@@ -550,7 +549,7 @@ namespace RicochetRobots
 					if (m_grid[i][j].isOpenN == false)
 					{
 						glVertex2i(m_pxSize*j		, m_pxSize*i + 1);
-						glVertex2i(m_pxSize*j + m_pxSize	, m_pxSize*i + 1);
+						glVertex2i(m_pxSize*j + m_pxSize, m_pxSize*i + 1);
 					}
 
 					if (m_grid[i][j].isOpenE == false)
@@ -562,7 +561,7 @@ namespace RicochetRobots
 					if (m_grid[i][j].isOpenS == false)
 					{
 						glVertex2i(m_pxSize*j		, m_pxSize*i + m_pxSize - 1	);
-						glVertex2i(m_pxSize*j + m_pxSize	, m_pxSize*i + m_pxSize - 1	);
+						glVertex2i(m_pxSize*j + m_pxSize, m_pxSize*i + m_pxSize - 1	);
 					}
 					
 					if (m_grid[i][j].isOpenW == false)
@@ -572,34 +571,6 @@ namespace RicochetRobots
 					}
 					
 				glEnd();
-
-				//Draw robots
-				unsigned char xpos, ypos;
-
-				xpos = m_robots.greenPos & 0xF0;
-				xpos = xpos >> 4;
-				ypos = m_robots.greenPos & 0x0F;
-				glColor3f(0.0f	, 1.0f	, 0.0f);
-				Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
-
-				xpos = m_robots.yellowPos & 0xF0;
-				xpos = xpos >> 4;
-				ypos = m_robots.yellowPos & 0x0F;
-				glColor3f(1.0f	, 0.847f, 0.0f);
-				Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
-
-				xpos = m_robots.bluePos & 0xF0;
-				xpos = xpos >> 4;
-				ypos = m_robots.bluePos & 0x0F;
-				glColor3f(0.0f	, 0.0f	, 1.0f);
-				Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
-				
-				xpos = m_robots.redPos & 0xF0;
-				xpos = xpos >> 4;
-				ypos = m_robots.redPos & 0x0F;
-				glColor3f(1.0f	, 0.0f	, 0.0f);
-				Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
-
 				//Draw pieces
 				switch (m_grid[i][j].goalPiece)
 				{
@@ -731,6 +702,125 @@ namespace RicochetRobots
 
 
 			}
+	
+		//Draw robots
+		unsigned char xpos, ypos;
+
+		xpos = m_robots.greenPos & 0xF0;
+		xpos = xpos >> 4;
+		ypos = m_robots.greenPos & 0x0F;
+		glColor3f(0.0f	, 1.0f	, 0.0f);
+		Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
+
+		xpos = m_robots.yellowPos & 0xF0;
+		xpos = xpos >> 4;
+		ypos = m_robots.yellowPos & 0x0F;
+		glColor3f(1.0f	, 0.847f, 0.0f);
+		Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
+
+		xpos = m_robots.bluePos & 0xF0;
+		xpos = xpos >> 4;
+		ypos = m_robots.bluePos & 0x0F;
+		glColor3f(0.0f	, 0.0f	, 1.0f);
+		Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
+		
+		xpos = m_robots.redPos & 0xF0;
+		xpos = xpos >> 4;
+		ypos = m_robots.redPos & 0x0F;
+		glColor3f(1.0f	, 0.0f	, 0.0f);
+		Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
+
+		//Draw Goal Piece
+		switch (m_goal)
+		{	
+			case NOGOALPIECE:
+			
+				break;
+			case GREENTRIANGLE:
+				glColor3f(0.0f	, 1.0f	, 0.0f);
+				Primitives::drawTriangle(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;			
+			case GREENCIRCLE:
+				glColor3f(0.0f	, 1.0f	, 0.0f);
+				Primitives::drawCircle(BOARDSIZE/2 * m_pxSize, BOARDSIZE/2 * m_pxSize, m_pxSize/2, 24);
+				break;
+			case GREENDIAMOND:
+				glColor3f(0.0f	, 1.0f	, 0.0f);
+				Primitives::drawDiamond(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;
+			case GREENSQUARE:
+				glColor3f(0.0f	, 1.0f	, 0.0f);	
+				Primitives::drawSquare(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;
+
+			case YELLOWTRIANGLE:
+				glColor3f(1.0f	, 0.847f, 0.0f	);
+				Primitives::drawTriangle(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;			
+			case YELLOWCIRCLE:	
+				glColor3f(1.0f	, 0.847f, 0.0f	);
+				Primitives::drawCircle(BOARDSIZE/2 * m_pxSize, BOARDSIZE/2 * m_pxSize, m_pxSize/2, 24);
+				break;
+			case YELLOWDIAMOND:
+				glColor3f(1.0f	, 0.847f, 0.0f	);
+				Primitives::drawDiamond(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;
+			case YELLOWSQUARE:	
+				glColor3f(1.0f	, 0.847f, 0.0f	);
+				Primitives::drawSquare(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;		
+
+			case BLUETRIANGLE:
+				glColor3f(0.0f	, 0.0f	, 1.0f	);	
+				Primitives::drawTriangle(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;
+			case BLUECIRCLE:	
+				glColor3f(0.0f	, 0.0f	, 1.0f	);	
+				Primitives::drawCircle(BOARDSIZE/2 * m_pxSize, BOARDSIZE/2 * m_pxSize, m_pxSize/2, 24);
+				break;
+			case BLUEDIAMOND:
+				glColor3f(0.0f	, 0.0f	, 1.0f	);
+				Primitives::drawDiamond(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;
+			case BLUESQUARE:	
+				glColor3f(0.0f	, 0.0f	, 1.0f	);
+				Primitives::drawSquare(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;
+
+			case REDTRIANGLE:
+				glColor3f(1.0f	, 0.0f	, 0.0f	);	
+				Primitives::drawTriangle(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;			
+			case REDCIRCLE:	
+				glColor3f(1.0f	, 0.0f	, 0.0f	);
+				Primitives::drawCircle(BOARDSIZE/2 * m_pxSize, BOARDSIZE/2 * m_pxSize, m_pxSize/2, 24);
+				break;
+			case REDDIAMOND:
+				glColor3f(1.0f	, 0.0f	, 0.0f	);
+				Primitives::drawDiamond(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;
+			case REDSQUARE:	
+				glColor3f(1.0f	, 0.0f	, 0.0f	);
+				Primitives::drawSquare(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize, m_pxSize );
+				break;
+
+			case VORTEX:
+				glColor3f(1.0f	, 0.0f	, 0.0f	);
+				Primitives::drawCircle(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize/4, 24);
+			
+				glColor3f(0.0f	, 1.0f	, 0.0f	);
+				Primitives::drawCircle(BOARDSIZE/2 * m_pxSize + (m_pxSize/2), BOARDSIZE/2 * m_pxSize - (m_pxSize/2), m_pxSize/4, 24);
+		
+				glColor3f(0.0f	, 0.0f	, 1.0f	);
+				Primitives::drawCircle(BOARDSIZE/2 * m_pxSize + (m_pxSize/2), BOARDSIZE/2 * m_pxSize + (m_pxSize/2), m_pxSize/4, 24);
+	
+				glColor3f(1.0f	, 0.847f, 0.0f	);
+				Primitives::drawCircle(BOARDSIZE/2 * m_pxSize - (m_pxSize/2), BOARDSIZE/2 * m_pxSize + (m_pxSize/2), m_pxSize/4, 24);
+
+				break;
+
+					
+		};
 	}
 
 	void Board::m_buildGrid()
@@ -759,7 +849,7 @@ namespace RicochetRobots
 			choices[pick] = choices[3 - (4 - size)];
 		}
 	
-		//Randomize each piece: front or back
+		//Randomize each subboard: front or back
 		if ( rand() % 2 == 0)
 			sub1.back();
 		if ( rand() % 2 == 0)
@@ -784,28 +874,28 @@ namespace RicochetRobots
 		xpos = rand() % 8;
 		(xpos == 7) ? ypos = rand() % 7 : ypos = rand() % 8;
 		q[0] = xpos;
-		q[0] = q[0] << 4;
+		q[0] = (unsigned char)(q[0] << 4);
 		q[0] += ypos;
 
 		//q2 ranges from (8,0) to (15,7), but excludes the (8,7) corner
 		xpos = rand() % 8 + 8;
 		(xpos == 8) ? ypos = rand() % 7 : ypos = rand() % 8;
 		q[1] = xpos;
-		q[1] = q[1] << 4;
+		q[1] = (unsigned char)(q[1] << 4);
 		q[1] += ypos;
 
 		//q3 ranges from (0,8) to (7,15), but excludes the (7,8) corner
 		xpos = rand() % 8;
 		(xpos == 7) ? ypos = rand() % 7 + 9 : ypos = rand() % 8 + 8;
 		q[2] = xpos;
-		q[2] = q[2] << 4;
+		q[2] = (unsigned char)(q[2] << 4);
 		q[2] += ypos;
 
 		//q4 ranges from (8,8) to (15,15), but excludes the (8,8) corner
 		xpos = rand() % 8 + 8;
 		(xpos == 8) ? ypos = rand() % 7 + 9 : ypos = rand() % 8 + 8;
 		q[3] = xpos;
-		q[3] = q[3] << 4;
+		q[3] = (unsigned char)(q[3] << 4);
 		q[3] += ypos;	
 	
 		choices[0] = 0;
@@ -833,12 +923,13 @@ namespace RicochetRobots
 			choices[pick] = choices[3 - (4 - size)];
 		}
 		
+		//Randomize the goal piece chosen
+		m_goal = (GoalPiece)(rand() % 17 + 1);
 
 		//Build the grid	
 		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
 			for (unsigned int j = 0; j < BOARDSIZE/2; j++)
 				m_grid[i][j] = sub1.get(i,j);
-		
 
 		sub2.rotate90();
 		for (unsigned int i = 0; i < BOARDSIZE/2; i++)

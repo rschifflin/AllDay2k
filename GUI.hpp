@@ -42,6 +42,7 @@ namespace GUI
 		
 		virtual void update(int mousex, int mousey, bool mousedown) = 0;
 		virtual void draw() = 0;
+		virtual ~GUIElement(){}
 	};
 
 	class GUIManager
