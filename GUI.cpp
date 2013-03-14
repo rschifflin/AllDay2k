@@ -70,7 +70,10 @@ namespace GUI
 		for (std::list<GUIElement*>::iterator	iter  = m_elements.begin();
 							iter != m_elements.end();
 							++iter)
-			(*iter)->update(mousex, mousey, mousedown);
+		{
+			if ( (*iter)->getIsActive() )
+				(*iter)->update(mousex, mousey, mousedown);
+		}
 	}
 	
 	void GUIManager::draw()
@@ -78,8 +81,41 @@ namespace GUI
 		for (std::list<GUIElement*>::iterator	iter  = m_elements.begin();
 							iter != m_elements.end();
 							++iter)
-			(*iter)->draw();
+		{
+			if ( (*iter)->getIsActive() )
+				(*iter)->draw();
+		}
 	}	
+
+	void GUIManager::hideElement(std::string elemName)
+	{
+		for (std::list<GUIElement*>::iterator	iter  = m_elements.begin();
+							iter != m_elements.end();
+							++iter)
+		{
+			if ((*iter)->getName().compare(elemName) == 0)
+			{
+				(*iter)->hide();
+				break;
+			}
+		}
+	}
+	void GUIManager::showElement(std::string elemName)
+	{
+		for (std::list<GUIElement*>::iterator	iter  = m_elements.begin();
+							iter != m_elements.end();
+							++iter)
+		{
+			if ((*iter)->getName().compare(elemName) == 0)
+			{
+				(*iter)->show();
+				break;
+			}
+		}
+	}
+
+
+
 
 	GUIManager::~GUIManager()
 	{	
@@ -98,6 +134,7 @@ namespace GUI
 		m_h = h;
 		m_onClick = onClick;
 		m_onDraw = onDraw;
+		m_isActive = true;
 	}
 	void GUIButton::update(int mousex, int mousey, bool mousedown)
 	{

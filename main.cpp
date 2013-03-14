@@ -168,6 +168,7 @@ int GUIInit()
 	guiManager->addButton("btnRandomize", 0, SCREENHEIGHT-32, 32, 32, onClickRandomize, drawRandomize);
 	guiManager->addButton("btnSolve", 32, SCREENHEIGHT-32, 32, 32, onClickSolve, drawSolve);
 	guiManager->addButton("btnStop", 64, SCREENHEIGHT-32, 32, 32, onClickStop, drawStop);
+	guiManager->hideElement("btnStop");
 	return 0;
 }
 
@@ -180,7 +181,11 @@ void onClickRandomize()
 void onClickSolve()
 {
 	if (testTimer)
+	{
 		testTimer->start();	
+		guiManager->hideElement("btnSolve");
+		guiManager->showElement("btnStop");
+	}
 }
 
 void onClickStop()
@@ -189,6 +194,8 @@ void onClickStop()
 	{
 		testTimer->stop();
 		testTimer->reset();
+		guiManager->hideElement("btnStop");
+		guiManager->showElement("btnSolve");
 	}
 }
 
