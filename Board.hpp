@@ -124,38 +124,38 @@ namespace RicochetRobots
 
 	const int BOARDSIZE = 16;
 
-	class SubBoard
-	{
-		Square m_grid[BOARDSIZE/2][BOARDSIZE/2];  //Actual orientation
-		Square m_gridA[BOARDSIZE/2][BOARDSIZE/2]; //Front side reference
-		Square m_gridB[BOARDSIZE/2][BOARDSIZE/2]; //Back side reference
-		
-		SubGoal m_subGoal[5]; //Actual subGoal reference
-		SubGoal m_subGoalA[5]; //Front side reference
-		SubGoal m_subGoalB[5]; //Back side reference
-
-		bool m_isFront;
-		int m_angle;
-		void m_assignGrid(); //Uses front flag and angle to set m_grid to the correct orientation
-	public:
-		SubBoard(int type = 0);
-
-		Square get(unsigned int i, unsigned int j) const { if (i < BOARDSIZE/2 && j < BOARDSIZE/2) return m_grid[i][j]; return m_grid[0][0]; }
-		SubGoal getSubGoal(int index) const { if (index >= 0 && index <= 4) return m_subGoal[index]; return m_subGoal[0]; }
-
-		void loadType(int type); //Creates one of four subboard types
-
-		void front() {if (!m_isFront) { m_isFront = true; m_assignGrid(); } }
-		void back() {if (m_isFront) { m_isFront = false; m_assignGrid(); } }
-
-		void rotate0() {if (m_angle != 0) { m_angle = 0; m_assignGrid(); } }
-		void rotate90() {if (m_angle != 90) { m_angle = 90; m_assignGrid(); } }
-		void rotate180() {if (m_angle != 180) { m_angle = 180; m_assignGrid(); } }
-		void rotate270() {if (m_angle != 270) { m_angle = 270; m_assignGrid(); } }
-	};
-
 	class Board
 	{
+		class SubBoard
+		{
+			Square m_grid[BOARDSIZE/2][BOARDSIZE/2];  //Actual orientation
+			Square m_gridA[BOARDSIZE/2][BOARDSIZE/2]; //Front side reference
+			Square m_gridB[BOARDSIZE/2][BOARDSIZE/2]; //Back side reference
+			
+			SubGoal m_subGoal[5]; //Actual subGoal reference
+			SubGoal m_subGoalA[5]; //Front side reference
+			SubGoal m_subGoalB[5]; //Back side reference
+
+			bool m_isFront;
+			int m_angle;
+			void m_assignGrid(); //Uses front flag and angle to set m_grid to the correct orientation
+		public:
+			SubBoard(int type = 0);
+
+			Square get(unsigned int i, unsigned int j) const { if (i < BOARDSIZE/2 && j < BOARDSIZE/2) return m_grid[i][j]; return m_grid[0][0]; }
+			SubGoal getSubGoal(int index) const { if (index >= 0 && index <= 4) return m_subGoal[index]; return m_subGoal[0]; }
+
+			void loadType(int type); //Creates one of four subboard types
+
+			void front() {if (!m_isFront) { m_isFront = true; m_assignGrid(); } }
+			void back() {if (m_isFront) { m_isFront = false; m_assignGrid(); } }
+
+			void rotate0() {if (m_angle != 0) { m_angle = 0; m_assignGrid(); } }
+			void rotate90() {if (m_angle != 90) { m_angle = 90; m_assignGrid(); } }
+			void rotate180() {if (m_angle != 180) { m_angle = 180; m_assignGrid(); } }
+			void rotate270() {if (m_angle != 270) { m_angle = 270; m_assignGrid(); } }
+		};
+
 		unsigned int m_seed;
 
 		Square m_grid[BOARDSIZE][BOARDSIZE];
@@ -174,7 +174,9 @@ namespace RicochetRobots
 		void draw();					//Render the board to the screen
 
 		int getSize() const {return BOARDSIZE;}
-
+		GoalPiece getGoal const {return m_goal;}
+		Goals getGoalPos const {return m_goals;}
+		Robots getRobots const {return m_robots;}
 		Square getSquare(unsigned int x, unsigned int y) const { if (x < BOARDSIZE && y < BOARDSIZE) return m_grid[y][x]; /*Else error: invalid bounds*/ return m_grid[0][0]; }
 	};
 } //End Namespace

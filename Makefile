@@ -1,5 +1,8 @@
 CC = clang++
 CFLAGS = -Weverything -Wno-padded -Wno-weak-vtables -g 
+
+#CC = g++
+#CFLAGS = -Wold-style-cast -g
 CLIBS = -lSDL -lGL
 
 Solver.exe : main.o Board.o Timer.o GLNumbers.o GUI.o 

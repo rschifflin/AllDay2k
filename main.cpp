@@ -146,7 +146,7 @@ int OpenGLInit()
 	glMatrixMode(GL_MODELVIEW);	
 	glViewport(0,0,SCREENWIDTH,SCREENHEIGHT);
 
-	glClearColor((GLclampf)1, (GLclampf)1, (GLclampf)1, 1.0); //Set color buffer clear value to white
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0); //Set color buffer clear value to white
 	glClearStencil(0);  //Set stencil buffer clear value to 0
 
 	GLenum error = glGetError();
@@ -184,6 +184,7 @@ void onClickSolve()
 	{
 		testTimer->start();	
 		guiManager->hideElement("btnSolve");
+		guiManager->hideElement("btnRandomize");
 		guiManager->showElement("btnStop");
 	}
 }
@@ -196,6 +197,7 @@ void onClickStop()
 		testTimer->reset();
 		guiManager->hideElement("btnStop");
 		guiManager->showElement("btnSolve");
+		guiManager->showElement("btnRandomize");
 	}
 }
 

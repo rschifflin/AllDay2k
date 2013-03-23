@@ -5,12 +5,12 @@
 
 namespace RicochetRobots
 {
-	SubBoard::SubBoard(int type)
+	Board::SubBoard::SubBoard(int type)
 	{
 		loadType(type);
 	}
 
-	void SubBoard::loadType(int type)
+	void Board::SubBoard::loadType(int type)
 	{
 		for (int i = 0; i < BOARDSIZE/2; i++)
 			for (int j = 0; j < BOARDSIZE/2; j++)
@@ -36,20 +36,20 @@ namespace RicochetRobots
 		default:
 		case 0:
 			m_subGoalA[0].type = m_subGoalB[0].type = GREENTRIANGLE;
-			m_subGoalA[0].pos = (unsigned char)((3 << 4) + 1);
-			m_subGoalB[0].pos = (unsigned char)((2 << 4) + 6); 
+			m_subGoalA[0].pos = static_cast<unsigned char>((3 << 4) + 1);
+			m_subGoalB[0].pos = static_cast<unsigned char>((2 << 4) + 6); 
 			
 			m_subGoalA[1].type = m_subGoalB[1].type = YELLOWDIAMOND;
-			m_subGoalA[1].pos = (unsigned char)((6 << 4) + 3);
-			m_subGoalB[1].pos = (unsigned char)((6 << 4) + 4); 
+			m_subGoalA[1].pos = static_cast<unsigned char>((6 << 4) + 3);
+			m_subGoalB[1].pos = static_cast<unsigned char>((6 << 4) + 4); 
 
 			m_subGoalA[2].type = m_subGoalB[2].type = BLUESQUARE;
-			m_subGoalA[2].pos = (unsigned char)((4 << 4) + 6);
-			m_subGoalB[2].pos = (unsigned char)((3 << 4) + 6); 
+			m_subGoalA[2].pos = static_cast<unsigned char>((4 << 4) + 6);
+			m_subGoalB[2].pos = static_cast<unsigned char>((3 << 4) + 6); 
 
 			m_subGoalA[3].type = m_subGoalB[3].type = REDCIRCLE;
-			m_subGoalA[3].pos = (unsigned char)((1 << 4) + 4);
-			m_subGoalB[3].pos = (unsigned char)((1 << 4) + 3); 
+			m_subGoalA[3].pos = static_cast<unsigned char>((1 << 4) + 4);
+			m_subGoalB[3].pos = static_cast<unsigned char>((1 << 4) + 3); 
 
 			m_subGoalA[4].type = m_subGoalB[4].type = NOGOALPIECE;
 			m_subGoalA[4].pos = 0;
@@ -122,20 +122,20 @@ namespace RicochetRobots
 			break;
 		case 1:			
 			m_subGoalA[0].type = m_subGoalB[0].type = GREENCIRCLE;
-			m_subGoalA[0].pos = (unsigned char)((4 << 4) + 1);
-			m_subGoalB[0].pos = (unsigned char)((2 << 4) + 4); 
+			m_subGoalA[0].pos = static_cast<unsigned char>((4 << 4) + 1);
+			m_subGoalB[0].pos = static_cast<unsigned char>((2 << 4) + 4); 
 			
 			m_subGoalA[1].type = m_subGoalB[1].type = YELLOWSQUARE;
-			m_subGoalA[1].pos = (unsigned char)((5 << 4) + 5);
-			m_subGoalB[1].pos = (unsigned char)((5 << 4) + 6); 
+			m_subGoalA[1].pos = static_cast<unsigned char>((5 << 4) + 5);
+			m_subGoalB[1].pos = static_cast<unsigned char>((5 << 4) + 6); 
 
 			m_subGoalA[2].type = m_subGoalB[2].type = BLUEDIAMOND;
-			m_subGoalA[2].pos = (unsigned char)((3 << 4) + 6);
-			m_subGoalB[2].pos = (unsigned char)((6 << 4) + 2); 
+			m_subGoalA[2].pos = static_cast<unsigned char>((3 << 4) + 6);
+			m_subGoalB[2].pos = static_cast<unsigned char>((6 << 4) + 2); 
 
 			m_subGoalA[3].type = m_subGoalB[3].type = REDTRIANGLE;
-			m_subGoalA[3].pos = (unsigned char)((1 << 4) + 3);
-			m_subGoalB[3].pos = (unsigned char)((3 << 4) + 4); 
+			m_subGoalA[3].pos = static_cast<unsigned char>((1 << 4) + 3);
+			m_subGoalB[3].pos = static_cast<unsigned char>((3 << 4) + 4); 
 
 			m_subGoalA[4].type = m_subGoalB[4].type = NOGOALPIECE;
 			m_subGoalA[4].pos = 0;
@@ -207,20 +207,20 @@ namespace RicochetRobots
 			break;
 		case 2:
 			m_subGoalA[0].type = m_subGoalB[0].type = GREENDIAMOND;
-			m_subGoalA[0].pos = (unsigned char)((4 << 4) + 5);
-			m_subGoalB[0].pos = (unsigned char)((5 << 4) + 2); 
+			m_subGoalA[0].pos = static_cast<unsigned char>((4 << 4) + 5);
+			m_subGoalB[0].pos = static_cast<unsigned char>((5 << 4) + 2); 
 			
 			m_subGoalA[1].type = m_subGoalB[1].type = YELLOWCIRCLE;
-			m_subGoalA[1].pos = (unsigned char)((3 << 4) + 2);
-			m_subGoalB[1].pos = (unsigned char)((6 << 4) + 2); 
+			m_subGoalA[1].pos = static_cast<unsigned char>((3 << 4) + 2);
+			m_subGoalB[1].pos = static_cast<unsigned char>((6 << 4) + 2); 
 
 			m_subGoalA[2].type = m_subGoalB[2].type = BLUETRIANGLE;
-			m_subGoalA[2].pos = (unsigned char)((5 << 4) + 3);
-			m_subGoalB[2].pos = (unsigned char)((4 << 4) + 7); 
+			m_subGoalA[2].pos = static_cast<unsigned char>((5 << 4) + 3);
+			m_subGoalB[2].pos = static_cast<unsigned char>((4 << 4) + 7); 
 
 			m_subGoalA[3].type = m_subGoalB[3].type = REDSQUARE;
-			m_subGoalA[3].pos = (unsigned char)((2 << 4) + 4);
-			m_subGoalB[3].pos = (unsigned char)((1 << 4) + 5); 
+			m_subGoalA[3].pos = static_cast<unsigned char>((2 << 4) + 4);
+			m_subGoalB[3].pos = static_cast<unsigned char>((1 << 4) + 5); 
 
 			m_subGoalA[4].type = m_subGoalB[4].type = NOGOALPIECE;
 			m_subGoalA[4].pos = 0;
@@ -293,24 +293,24 @@ namespace RicochetRobots
 
 		case 3:
 			m_subGoalA[0].type = m_subGoalB[0].type = GREENSQUARE;
-			m_subGoalA[0].pos = (unsigned char)((6 << 4) + 5);
-			m_subGoalB[0].pos = (unsigned char)((3 << 4) + 3); 
+			m_subGoalA[0].pos = static_cast<unsigned char>((6 << 4) + 5);
+			m_subGoalB[0].pos = static_cast<unsigned char>((3 << 4) + 3); 
 			
 			m_subGoalA[1].type = m_subGoalB[1].type = YELLOWTRIANGLE;
-			m_subGoalA[1].pos = (unsigned char)((1 << 4) + 6);
-			m_subGoalB[1].pos = (unsigned char)((6 << 4) + 2); 
+			m_subGoalA[1].pos = static_cast<unsigned char>((1 << 4) + 6);
+			m_subGoalB[1].pos = static_cast<unsigned char>((6 << 4) + 2); 
 
 			m_subGoalA[2].type = m_subGoalB[2].type = BLUECIRCLE;
-			m_subGoalA[2].pos = (unsigned char)((5 << 4) + 1);
-			m_subGoalB[2].pos = (unsigned char)((2 << 4) + 3); 
+			m_subGoalA[2].pos = static_cast<unsigned char>((5 << 4) + 1);
+			m_subGoalB[2].pos = static_cast<unsigned char>((2 << 4) + 3); 
 
 			m_subGoalA[3].type = m_subGoalB[3].type = REDDIAMOND;
-			m_subGoalA[3].pos = (unsigned char)((3 << 4) + 4);
-			m_subGoalB[3].pos = (unsigned char)((1 << 4) + 5); 
+			m_subGoalA[3].pos = static_cast<unsigned char>((3 << 4) + 4);
+			m_subGoalB[3].pos = static_cast<unsigned char>((1 << 4) + 5); 
 
 			m_subGoalA[4].type = m_subGoalB[4].type = VORTEX;
-			m_subGoalA[4].pos = (unsigned char)((7 << 4) + 2);
-			m_subGoalB[4].pos = (unsigned char)((5 << 4) + 7);
+			m_subGoalA[4].pos = static_cast<unsigned char>((7 << 4) + 2);
+			m_subGoalB[4].pos = static_cast<unsigned char>((5 << 4) + 7);
 
 			m_gridA[0][2].isOpenE = false;
 			m_gridA[0][3].isOpenW = false;
@@ -390,7 +390,7 @@ namespace RicochetRobots
 		m_assignGrid();
 	}//End loadType
 
-	void SubBoard::m_assignGrid()
+	void Board::SubBoard::m_assignGrid()
 	{
 		
 		if (m_isFront)
@@ -414,7 +414,7 @@ namespace RicochetRobots
 					unsigned char xnew, ynew;
 					ynew = BOARDSIZE/2 - 1 - xpos;
 					xnew = ypos;
-					m_subGoal[i].pos = (unsigned char)( (xnew << 4) + ynew);
+					m_subGoal[i].pos = static_cast<unsigned char>( (xnew << 4) + ynew);
 					m_subGoal[i].type = m_subGoalA[i].type;
 
 				}
@@ -442,7 +442,7 @@ namespace RicochetRobots
 					unsigned char xnew, ynew;
 					ynew = BOARDSIZE/2 - 1 - ypos;
 					xnew = BOARDSIZE/2 - 1 - xpos;
-					m_subGoal[i].pos = (unsigned char)( (xnew << 4) + ynew);
+					m_subGoal[i].pos = static_cast<unsigned char>( (xnew << 4) + ynew);
 					m_subGoal[i].type = m_subGoalA[i].type;
 					
 				}
@@ -469,7 +469,7 @@ namespace RicochetRobots
 					unsigned char xnew, ynew;
 					ynew = xpos;
 					xnew = BOARDSIZE/2 - 1 - ypos;
-					m_subGoal[i].pos = (unsigned char)( (xnew << 4) + ynew);
+					m_subGoal[i].pos = static_cast<unsigned char>( (xnew << 4) + ynew);
 					m_subGoal[i].type = m_subGoalA[i].type;
 
 				}
@@ -511,7 +511,7 @@ namespace RicochetRobots
 					unsigned char xnew, ynew;
 					ynew = BOARDSIZE/2 - 1 - xpos;
 					xnew = ypos;
-					m_subGoal[i].pos = (unsigned char)( (xnew << 4) + ynew);
+					m_subGoal[i].pos = static_cast<unsigned char>( (xnew << 4) + ynew);
 					m_subGoal[i].type = m_subGoalB[i].type;
 
 				}
@@ -534,9 +534,9 @@ namespace RicochetRobots
 						if (bumperVal != NOBUMPER)
 						{
 							if (bumperVal % 2 == 1)
-								m_grid[u][v].bumper = (Bumper)(bumperVal - 1);
+								m_grid[u][v].bumper = static_cast<Bumper>(bumperVal - 1);
 							else
-								m_grid[u][v].bumper = (Bumper)(bumperVal + 1);
+								m_grid[u][v].bumper = static_cast<Bumper>(bumperVal + 1);
 						}
 					}
 			}
@@ -549,7 +549,7 @@ namespace RicochetRobots
 					unsigned char xnew, ynew;
 					ynew = BOARDSIZE/2 - 1 - ypos;
 					xnew = BOARDSIZE/2 - 1 - xpos;
-					m_subGoal[i].pos = (unsigned char)( (xnew << 4) + ynew);
+					m_subGoal[i].pos = static_cast<unsigned char>( (xnew << 4) + ynew);
 					m_subGoal[i].type = m_subGoalB[i].type;
 				}
 
@@ -576,7 +576,7 @@ namespace RicochetRobots
 					unsigned char xnew, ynew;
 					ynew = xpos;
 					xnew = BOARDSIZE/2 - 1 - ypos;
-					m_subGoal[i].pos = (unsigned char)( (xnew << 4) + ynew);
+					m_subGoal[i].pos = static_cast<unsigned char>( (xnew << 4) + ynew);
 					m_subGoal[i].type = m_subGoalB[i].type;
 
 				}
@@ -599,9 +599,9 @@ namespace RicochetRobots
 						if (bumperVal != NOBUMPER)
 						{
 							if (bumperVal % 2 == 1)
-								m_grid[u][v].bumper = (Bumper)(bumperVal - 1);
+								m_grid[u][v].bumper = static_cast<Bumper>(bumperVal - 1);
 							else
-								m_grid[u][v].bumper = (Bumper)(bumperVal + 1);
+								m_grid[u][v].bumper = static_cast<Bumper>(bumperVal + 1);
 						}
 					}
 			}
@@ -617,7 +617,7 @@ namespace RicochetRobots
 	void Board::createBoard(unsigned int seed)
 	{
 		if (seed == 0)
-			m_seed = (unsigned int)time(NULL);
+			m_seed = static_cast<unsigned int>(time(NULL));
 		else
 			m_seed = seed;
 
@@ -1015,28 +1015,28 @@ namespace RicochetRobots
 		xpos = rand() % 8;
 		(xpos == 7) ? ypos = rand() % 7 : ypos = rand() % 8;
 		q[0] = xpos;
-		q[0] = (unsigned char)(q[0] << 4);
+		q[0] = static_cast<unsigned char>(q[0] << 4);
 		q[0] += ypos;
 
 		//q2 ranges from (8,0) to (15,7), but excludes the (8,7) corner
 		xpos = rand() % 8 + 8;
 		(xpos == 8) ? ypos = rand() % 7 : ypos = rand() % 8;
 		q[1] = xpos;
-		q[1] = (unsigned char)(q[1] << 4);
+		q[1] = static_cast<unsigned char>(q[1] << 4);
 		q[1] += ypos;
 
 		//q3 ranges from (0,8) to (7,15), but excludes the (7,8) corner
 		xpos = rand() % 8;
 		(xpos == 7) ? ypos = rand() % 7 + 9 : ypos = rand() % 8 + 8;
 		q[2] = xpos;
-		q[2] = (unsigned char)(q[2] << 4);
+		q[2] = static_cast<unsigned char>(q[2] << 4);
 		q[2] += ypos;
 
 		//q4 ranges from (8,8) to (15,15), but excludes the (8,8) corner
 		xpos = rand() % 8 + 8;
 		(xpos == 8) ? ypos = rand() % 7 + 9 : ypos = rand() % 8 + 8;
 		q[3] = xpos;
-		q[3] = (unsigned char)(q[3] << 4);
+		q[3] = static_cast<unsigned char>(q[3] << 4);
 		q[3] += ypos;	
 	
 		choices[0] = 0;
@@ -1065,7 +1065,7 @@ namespace RicochetRobots
 		}
 		
 		//Randomize the goal piece chosen
-		m_goal = (GoalPiece)(rand() % 17);
+		m_goal = static_cast<GoalPiece>(rand() % 17);
 		
 		m_assignGoals(sub1, 0);
 		for (unsigned int i = 0; i < BOARDSIZE/2; i++)
@@ -1136,59 +1136,59 @@ namespace RicochetRobots
 			switch (sg.type)
 			{
 				case GREENTRIANGLE:
-					m_goals.greenTriangle = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.greenTriangle = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case GREENCIRCLE:	
-					m_goals.greenCircle = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.greenCircle = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case GREENDIAMOND:
-					m_goals.greenDiamond = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.greenDiamond = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case GREENSQUARE:
-					m_goals.greenSquare = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.greenSquare = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 
 				case YELLOWTRIANGLE:
-					m_goals.yellowTriangle = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.yellowTriangle = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case YELLOWCIRCLE:
-					m_goals.yellowCircle = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.yellowCircle = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case YELLOWDIAMOND:
-					m_goals.yellowDiamond = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.yellowDiamond = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case YELLOWSQUARE:
-					m_goals.yellowSquare = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.yellowSquare = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 
 				case BLUETRIANGLE:
-					m_goals.blueTriangle = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.blueTriangle = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case BLUECIRCLE:
-					m_goals.blueCircle = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.blueCircle = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case BLUEDIAMOND:
-					m_goals.blueDiamond = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.blueDiamond = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case BLUESQUARE:
-					m_goals.blueSquare = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.blueSquare = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 
 				case REDTRIANGLE:
-					m_goals.redTriangle = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.redTriangle = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case REDCIRCLE:
-					m_goals.redCircle = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.redCircle = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case REDDIAMOND:
-					m_goals.redDiamond = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.redDiamond = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				case REDSQUARE:
-					m_goals.redSquare = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.redSquare = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 					break;
 				
 				case VORTEX:
-					m_goals.vortex = (unsigned char)(sg.pos + (xOffset << 4) + yOffset);
+					m_goals.vortex = static_cast<unsigned char>(sg.pos + (xOffset << 4) + yOffset);
 				default:
 					break;
 			}

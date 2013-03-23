@@ -51,8 +51,7 @@ namespace GUI
 
 	class GUIManager
 	{
-		std::list<GUIElement*> m_elements;
-
+		std::list<GUIElement*> m_elements;	
 	public:	
 		void addButton(std::string elemName, int xpos, int ypos, int w, int h, void (*onClick)(), void (*onDraw)(int xpos, int ypos, int w, int h) );
 		void moveElement(std::string elemName, int xpos, int ypos);
@@ -71,7 +70,7 @@ namespace GUI
 		void (*m_onDraw)(int xpos, int ypos, int w, int h);
 		
 	public:
-		GUIButton( std::string elemName, int xpos, int ypos, int w, int h, void (*onClick)(), void (*onDraw)(int xpos, int ypos, int w, int h) ); 
+		GUIButton(std::string elemName, int xpos, int ypos, int w, int h, void (*onClick)(), void (*onDraw)(int xpos, int ypos, int w, int h) ); 
 		void update(int mousex, int mousey, bool mousedown);
 		void draw();
 	};

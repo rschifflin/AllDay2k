@@ -26,7 +26,7 @@ namespace RicochetRobots
 			float tangent = tanf(theta); //Distance moved tangential to the circle
 			float radiant = cosf(theta); //Distance moved toward the center of the circle
 
-			float x = (float)r;
+			float x = static_cast<float>(r);
 			float y = 0.0;
 			glBegin(GL_POLYGON);
 				for (int i = 0; i < nVertices; i++)
@@ -95,9 +95,9 @@ namespace RicochetRobots
 		inline void drawForwardSlash(int x, int y, int w, int h)
 		{
 			glBegin(GL_QUADS);
-				glVertex2i(x + (int)(w * 0.75)	, y	);
+				glVertex2i(x + (w * 3/4)	, y	);
 				glVertex2i(x + w		, y	);
-				glVertex2i(x + (int)(w * 0.25)	, y + h	);
+				glVertex2i(x + (w * 1/4)	, y + h	);
 				glVertex2i(x			, y + h	);
 			glEnd();
 		}
@@ -106,23 +106,23 @@ namespace RicochetRobots
 		{
 			glBegin(GL_QUADS);
 				glVertex2i(x			, y	);
-				glVertex2i(x + (int)(w * 0.25)	, y	);
+				glVertex2i(x + (w * 1/4)	, y	);
 				glVertex2i(x + w		, y + h	);
-				glVertex2i(x + (int)(w * 0.75)	, y + h	);
+				glVertex2i(x + (w * 3/4)	, y + h	);
 			glEnd();
 		}
 		
 		inline void drawOctagon(int x, int y, int w, int h)
 		{
 			glBegin(GL_POLYGON);
-				glVertex2i(x + (int)(w * 0.293)	, y			);
-				glVertex2i(x + (int)(w * 0.707)	, y			);
-				glVertex2i(x + w		, y + (int)(h * 0.293)	);
-				glVertex2i(x + w		, y + (int)(h * 0.707)	);
-				glVertex2i(x + (int)(w * 0.707)	, y	+ h		);
-				glVertex2i(x + (int)(w * 0.293)	, y	+ h		);
-				glVertex2i(x 			, y + (int)(h * 0.707)	);
-				glVertex2i(x 			, y + (int)(h * 0.293)	);
+				glVertex2i(x + static_cast<int>(w * 0.293)	, y					);
+				glVertex2i(x + static_cast<int>(w * 0.707)	, y					);
+				glVertex2i(x + w				, y + static_cast<int>(h * 0.293)	);
+				glVertex2i(x + w				, y + static_cast<int>(h * 0.707)	);
+				glVertex2i(x + static_cast<int>(w * 0.707)	, y + h					);
+				glVertex2i(x + static_cast<int>(w * 0.293)	, y + h					);
+				glVertex2i(x 					, y + static_cast<int>(h * 0.707)	);
+				glVertex2i(x 					, y + static_cast<int>(h * 0.293)	);
 			glEnd();
 		}
 		
