@@ -1,9 +1,0 @@
-Solver.exe : main.o Board.o
-	clang++ -o Solver.exe main.o Board.o -lSDL -lGL -std=c++0x
-
-main.o : main.cpp Board.hpp
-	clang++ -c main.cpp
-
-Board.o : Board.cpp Primitives.hpp
-	clang++ -c Board.cpp -std=c++0x
-
