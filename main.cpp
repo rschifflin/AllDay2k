@@ -17,7 +17,7 @@
 #include "Board.hpp" //Board object
 #include "Timer.hpp" //Timer object
 #include "GUI.hpp" //GUI objects
-//#include "Solver.hpp" //Solver object; requires setup(Board) before solving can begin; 
+#include "Solver.hpp" //Solver object; requires setup(Board) before solving can begin; 
 
 int init();
 int SDLInit();
@@ -31,9 +31,13 @@ void draw();
 void onClickRandomize();
 void onClickSolve();
 void onClickStop();
+void onClickNext();
+void onClickPrev();
 void drawRandomize(GLint xpos, GLint ypos, GLint w, GLint h);
 void drawSolve(GLint xpos, GLint ypos, GLint w, GLint h);
 void drawStop(GLint xpos, GLint ypos, GLint w, GLint h);
+void drawNext(GLint xpos, GLint ypos, GLint w, GLint h);
+void drawPrev(GLint xpos, GLint ypos, GLint w, GLint h);
 
 int SCREENWIDTH = 512;
 int SCREENHEIGHT = 548;
@@ -46,9 +50,9 @@ enum SolveMode
 	UNSOLVED,
 	SOLVING,
 	SOLVED,
-	FUTILE
 } solveMode;
 
+RicochetRobots::Solver* solver = NULL;
 Timer* testTimer = NULL;
 RicochetRobots::Board* gameBoard = NULL;
 GUI::GUIManager* guiManager = NULL;
@@ -59,46 +63,48 @@ int main()
 	if (init())
 		return 0;
 	Timer fps;
+	
 	testTimer = new Timer();
 	gameBoard = new RicochetRobots::Board();
-
+	solver = new RicochetRobots::Solver();	
+	
 	while (!hasQuit)
 	{	
-
-		if (solveMode == SOLVING)
+		switch (solveMode)
 		{
-			//Don't draw updates, don't framecap; let the solver run at max speed, only handle input
-			handleInput();
-		}
-		else
-		{
-			fps.start();
-			
-			switch (solveMode)
-			{
-				default:
-				case UNSOLVED:
-					//In this mode, various keypresses set up the board's initial state
-					break;
+			case UNSOLVED:
+				//In this mode, various keypresses set up the board's initial state
+				break;
 				
-				case SOLVED:
-					//In this mode, various keypresses navigate the board's solution
-					break;
-					
-				case FUTILE:
-					//In this mode, no solution was found
-					break;
-			}
+			case SOLVING:
+				if ( solver->isSolved() )
+				{			
+					testTimer->stop();
+					guiManager->showElement("btnNext");
+					guiManager->showElement("btnPrev");
+					solveMode = SOLVED;
+				}
+				else
+				{
+					solver->search();
+				}
+				break;
+				
+			case SOLVED:
+				//In this mode, various keypresses navigate the board's solution
+				break;
+		}
 			
 			handleInput();
 			draw();
 
 			uint32_t elapsed = fps.getTicks();
 			if (elapsed < MS_PER_FRAME )
-				SDL_Delay( MS_PER_FRAME - elapsed);
-
-			fps.reset();
-		}
+			{
+				draw();
+				fps.reset();
+				fps.start();
+			}
 	}
 	
 	SDL_Quit();
@@ -168,7 +174,12 @@ int GUIInit()
 	guiManager->addButton("btnRandomize", 0, SCREENHEIGHT-32, 32, 32, onClickRandomize, drawRandomize);
 	guiManager->addButton("btnSolve", 32, SCREENHEIGHT-32, 32, 32, onClickSolve, drawSolve);
 	guiManager->addButton("btnStop", 64, SCREENHEIGHT-32, 32, 32, onClickStop, drawStop);
+	guiManager->addButton("btnNext", 96, SCREENHEIGHT-32, 24, 24, onClickNext, drawNext);
+	guiManager->addButton("btnPrev", 128, SCREENHEIGHT-32, 24, 24, onClickPrev, drawPrev);
+	
 	guiManager->hideElement("btnStop");
+	guiManager->hideElement("btnNext");
+	guiManager->hideElement("btnPrev");
 	return 0;
 }
 
@@ -183,9 +194,14 @@ void onClickSolve()
 	if (testTimer)
 	{
 		testTimer->start();	
+		
 		guiManager->hideElement("btnSolve");
 		guiManager->hideElement("btnRandomize");
+		guiManager->hideElement("btnNext");
+		guiManager->hideElement("btnPrev");
 		guiManager->showElement("btnStop");
+		solver->loadBoard(gameBoard);
+		solveMode = SOLVING;
 	}
 }
 
@@ -196,9 +212,35 @@ void onClickStop()
 		testTimer->stop();
 		testTimer->reset();
 		guiManager->hideElement("btnStop");
+		guiManager->hideElement("btnNext");
+		guiManager->hideElement("btnPrev");
 		guiManager->showElement("btnSolve");
 		guiManager->showElement("btnRandomize");
+		solver->stop();
+		solveMode = UNSOLVED;
 	}
+}
+
+void onClickNext()
+{
+		solver->solutionNext();
+}
+
+void onClickPrev()
+{
+		solver->solutionPrev();
+}
+
+void drawNext(GLint xpos, GLint ypos, GLint w, GLint h)
+{
+	glColor3f(1.0f, 1.0f, 0.0f);
+	RicochetRobots::Primitives::drawTriangle(xpos, ypos, xpos + w, ypos + (h/2), xpos, ypos + h);	
+}
+
+void drawPrev(GLint xpos, GLint ypos, GLint w, GLint h)
+{
+	glColor3f(1.0f, 1.0f, 0.0f);
+	RicochetRobots::Primitives::drawTriangle(xpos, ypos + (h/2), xpos + w, ypos, xpos + w, ypos + h);	
 }
 
 void drawRandomize(GLint xpos, GLint ypos, GLint w, GLint h)
@@ -278,8 +320,22 @@ void draw()
 	guiManager->draw();
 		
 	//Draw the countdown clock
-	glColor3f(0.0f, 1.0f, 0.0f);
+	if (solveMode == SOLVED)
+		glColor3f(1.0f, 0.0f, 0.0f);
+	else
+		glColor3f(0.0f, 1.0f, 0.0f);
+		
 	GLNumbers::drawTime( SCREENWIDTH - 144, SCREENHEIGHT - 32, 12, 28, testTimer->getTicks() );
+	
+	//Draw the heuristic if applicable
+	if (solveMode == SOLVING || solveMode == SOLVED)
+	{
+			for (unsigned char i = 0; i < 254; i++)
+			{
+					glColor3f(0.0f, 0.0f, 1.0f);
+					GLNumbers::drawDigit( ( (i & 0xF0) >> 4) * 32, (i & 0x0F) * 32, 8, 12, solver->getH(i) );
+			}
+	}
 	
 	SDL_GL_SwapBuffers();
 }

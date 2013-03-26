@@ -174,9 +174,11 @@ namespace RicochetRobots
 		void draw();					//Render the board to the screen
 
 		int getSize() const {return BOARDSIZE;}
-		GoalPiece getGoal const {return m_goal;}
-		Goals getGoalPos const {return m_goals;}
-		Robots getRobots const {return m_robots;}
+		GoalPiece getGoal() const {return m_goal;}
+		Goals getGoals() const {return m_goals;}
+		unsigned char getGoalPos() const; 
+		Robots getRobots() const {return m_robots;}
+		void setRobots(Robots robots) { m_robots = robots; }
 		Square getSquare(unsigned int x, unsigned int y) const { if (x < BOARDSIZE && y < BOARDSIZE) return m_grid[y][x]; /*Else error: invalid bounds*/ return m_grid[0][0]; }
 	};
 } //End Namespace

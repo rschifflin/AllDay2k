@@ -870,6 +870,13 @@ namespace RicochetRobots
 		glColor3f(1.0f	, 0.0f	, 0.0f);
 		Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
 
+		xpos = m_robots.blackPos & 0xF0;
+		xpos = xpos >> 4;
+		ypos = m_robots.blackPos & 0x0F;
+		glColor3f(0.0f	, 0.0f	, 0.0f);
+		Primitives::drawRing(m_pxSize*xpos + (m_pxSize/2), m_pxSize*ypos + (m_pxSize/2), (m_pxSize/2), 24, 4);
+
+
 		//Draw Goal Piece
 		switch (m_goal)
 		{	
@@ -1193,5 +1200,67 @@ namespace RicochetRobots
 					break;
 			}
 		}
+	}
+	
+	unsigned char Board::getGoalPos() const
+	{
+			switch (m_goal)
+			{
+				case GREENTRIANGLE:
+					return m_goals.greenTriangle;
+					
+				case GREENCIRCLE:	
+					return m_goals.greenCircle;
+					
+				case GREENDIAMOND:
+					return m_goals.greenDiamond;
+					
+				case GREENSQUARE:
+					return m_goals.greenSquare;
+					
+
+				case YELLOWTRIANGLE:
+					return m_goals.yellowTriangle;
+					
+				case YELLOWCIRCLE:
+					return m_goals.yellowCircle;
+					
+				case YELLOWDIAMOND:
+					return m_goals.yellowDiamond;
+					
+				case YELLOWSQUARE:
+					return m_goals.yellowSquare;
+					
+
+				case BLUETRIANGLE:
+					return m_goals.blueTriangle;
+					
+				case BLUECIRCLE:
+					return m_goals.blueCircle;
+					
+				case BLUEDIAMOND:
+					return m_goals.blueDiamond;
+					
+				case BLUESQUARE:
+					return m_goals.blueSquare;
+
+				case REDTRIANGLE:
+					return m_goals.redTriangle;
+					
+				case REDCIRCLE:
+					return m_goals.redCircle;
+					
+				case REDDIAMOND:
+					return m_goals.redDiamond;
+					
+				case REDSQUARE:
+					return m_goals.redSquare;
+				
+				case VORTEX:
+					return m_goals.vortex;
+					
+				default:
+					return 0;
+			}
 	}
 } //End Namespace

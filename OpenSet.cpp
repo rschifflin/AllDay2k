@@ -384,7 +384,7 @@ namespace RicochetRobots
 	template <class T, class Cmp>
 	void OpenSet<T*, Cmp>::clearAndFree() //Clears memory, deleting their pointers, and resets size
 	{
-		for (int i = 0; i < m_end; i++)
+		for (unsigned int i = 0; i < m_end; i++)
 		{
 			delete m_list[i];
 			m_list[i] = NULL;

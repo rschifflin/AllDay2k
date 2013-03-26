@@ -14,15 +14,22 @@ namespace RicochetRobots
 	{
 		if (m_isLoaded == true) //Board already loaded
 			stop();				//Will clear the board and free memory
-			
+				
+		for (int i = 0; i < 256; i++)
+			hvalues[i] = 255; //Initialize grid to 255
+		
 		if (board == NULL)
 		{
 			m_isLoaded = false;
 			m_isSolved = false;
+			m_board = NULL;
 		}
 		else
 		{
 			//Initialize empty set with Initial State
+			m_board = board;
+			m_precalcH(m_board->getGoalPos(), m_board->getGoal());
+			
 			Node* root = new Node;
 			
 			root->parent = NULL;
@@ -34,6 +41,8 @@ namespace RicochetRobots
 			
 			m_isLoaded = true;
 			m_isSolved = false;
+			
+			
 		}
 	}
 	
@@ -41,85 +50,495 @@ namespace RicochetRobots
 	{
 		if (!m_isSolved && checkNode != NULL)
 		{
-			GoalPiece goal = board->getGoal();
-			Goals goalPos = board->getGoalPos();
-			unsigned char robotPos;
+			Goals goals = m_board->getGoals();
 			
-			if (goal != VORTEX && goal != NOGOALPIECE)
+			switch (m_board->getGoal())
 			{
-				switch (goal)
-				{
+						case NOGOALPIECE:
+							break;
+							
+						case VORTEX:
+							if (checkNode->robots.bluePos == goals.vortex 	||
+								checkNode->robots.redPos == goals.vortex 	||
+								checkNode->robots.greenPos == goals.vortex	||
+								checkNode->robots.yellowPos == goals.vortex	 )
+								m_isSolved = true;
+							break;
+
 						case GREENTRIANGLE:
+							if (checkNode->robots.greenPos == goals.greenTriangle)
+								m_isSolved = true;
+							break;	
 						case GREENCIRCLE:
+							if (checkNode->robots.greenPos == goals.greenCircle)
+								m_isSolved = true;
+							break;
 						case GREENDIAMOND:
+							if (checkNode->robots.greenPos == goals.greenDiamond)
+								m_isSolved = true;
+							break;
 						case GREENSQUARE:
-							robotPos = checkNode->robots.greenPos;
+							if (checkNode->robots.greenPos == goals.greenSquare)
+								m_isSolved = true;
 							break;
 							
 						case YELLOWTRIANGLE:
+							if (checkNode->robots.yellowPos == goals.yellowTriangle)
+								m_isSolved = true;
+							break;
 						case YELLOWCIRCLE:
+							if (checkNode->robots.yellowPos == goals.yellowCircle)
+								m_isSolved = true;
+							break;
 						case YELLOWDIAMOND:
+							if (checkNode->robots.yellowPos == goals.yellowDiamond)
+								m_isSolved = true;
+							break;
 						case YELLOWSQUARE:
-							robotPos = checkNode->robots.yellowPos;
+							if (checkNode->robots.yellowPos == goals.yellowSquare)
+								m_isSolved = true;
 							break;
 							
 						case BLUETRIANGLE:
+							if (checkNode->robots.bluePos == goals.blueTriangle)
+								m_isSolved = true;
+							break;
 						case BLUECIRCLE:
+							if (checkNode->robots.bluePos == goals.blueCircle)
+								m_isSolved = true;
+							break;
 						case BLUEDIAMOND:
+							if (checkNode->robots.bluePos == goals.blueDiamond)
+								m_isSolved = true;
+							break;
 						case BLUESQUARE:
-							robotPos = checkNode->robots.bluePos;
+							if (checkNode->robots.bluePos == goals.blueSquare)
+								m_isSolved = true;
 							break;
 							
 						case REDTRIANGLE:
+							if (checkNode->robots.redPos == goals.redTriangle)
+								m_isSolved = true;
+							break;
 						case REDCIRCLE:
+							if (checkNode->robots.redPos == goals.redCircle)
+								m_isSolved = true;
+							break;
 						case REDDIAMOND:
+							if (checkNode->robots.redPos == goals.redDiamond)
+								m_isSolved = true;
+							break;
 						case REDSQUARE:
-							robotPos = checkNode->robots.redPos;
-							break;						
-				}
-				
-				if (robotPos == goalPos[goal])
-						m_isSolved = true;
-						
+							if (checkNode->robots.redPos == goals.redSquare)
+								m_isSolved = true;
+							break;					
 			}
-			else if (	goal == VORTEX && 
-						(
-							checkNode->robots.bluePos == goalPos[goal]
-							||	checkNode->robots.redPos == goalPos[goal]
-							||	checkNode->robots.greenPos == goalPos[goal]
-							||	checkNode->robots.yellowPos == goalPos[goal]
-						)
-					)
-					m_isSolved = true;
-					
 			
 			if (m_isSolved) //Create solution path and set iter
 			{
 				m_solutionPath.clear();
 
 				for (Node* solNode = checkNode; solNode != NULL; solNode = solNode->parent)
-					m_solutionPath.pushFront(solNode);
+					m_solutionPath.push_front(solNode);
 				
 				m_solutionIter = m_solutionPath.begin();
+				m_board->setRobots( m_solutionPath.front()->robots );
 			}
 		}
 			
 			
 	}
+	uint16_t Solver::m_calcH(Robots robots)
+	{
+		//Heuristic has two parts
+		//Most-Significant 8-bits: Admissable heuristic 'minimum rook moves with no other robots'
+		//Leas-Significant 8-bits: Weight heuristic 'best blockers'
+		uint16_t retval;
+		
+		uint8_t h1 = 0;
+		uint8_t h2 = 0;
+		
+		int color = 0;
+		Square square;
+		
+		switch (m_board->getGoal())
+		{
+			case NOGOALPIECE:
+			case VORTEX:
+			case GREENTRIANGLE:
+			case GREENDIAMOND:
+			case GREENCIRCLE:
+			case GREENSQUARE:
+				color = 0;
+				h1 = hvalues[robots.greenPos];
+				break;
+				
+			case YELLOWTRIANGLE:
+			case YELLOWDIAMOND:
+			case YELLOWCIRCLE:
+			case YELLOWSQUARE:
+				color = 1;
+				h1 = hvalues[robots.yellowPos];
+				break;
+				
+			case BLUETRIANGLE:
+			case BLUEDIAMOND:
+			case BLUECIRCLE:
+			case BLUESQUARE:			
+				color = 2;
+				h1 = hvalues[robots.bluePos];
+				break;
+				
+			case REDTRIANGLE:
+			case REDDIAMOND:
+			case REDCIRCLE:
+			case REDSQUARE:
+				color = 3;
+				h1 = hvalues[robots.redPos];
+				break;
+		}
+		
+		//Green
+		if (color != 0)
+		{
+			square = m_board->getSquare( (robots.greenPos & 0xF0) >> 4, robots.greenPos & 0x0F );
+			//N
+			if ( (robots.greenPos & 0x0F) > 0 && square.isOpenN && hvalues[robots.greenPos - 1] < 5)
+				h2 += hvalues[robots.greenPos - 1];
+			else
+				h2 += 5;
+				
+			//E
+			if ( ((robots.greenPos & 0xF0) >> 4) < 15 && square.isOpenE && hvalues[robots.greenPos + 16] < 5)
+				h2 += hvalues[robots.greenPos + 16];
+			else
+				h2 += 5;
+				
+			//S
+			if ( (robots.greenPos & 0x0F) < 15 && square.isOpenS && hvalues[robots.greenPos + 1] < 5)
+				h2 += hvalues[robots.greenPos + 1];
+			else
+				h2 += 5;
+			
+			//W
+			if ( ((robots.greenPos & 0xF0) >> 4) > 0 && square.isOpenW && hvalues[robots.greenPos - 16] < 5)
+				h2 += hvalues[robots.greenPos - 16];
+			else
+				h2 += 5;
+		}
+		
+		//Yellow
+		if (color != 1)
+		{
+		square = m_board->getSquare( (robots.yellowPos & 0xF0) >> 4, robots.yellowPos & 0x0F );
+		
+			//N
+			if ( (robots.yellowPos & 0x0F) > 0 && square.isOpenN && hvalues[robots.yellowPos - 1] < 5)
+				h2 += hvalues[robots.yellowPos - 1];
+			else
+				h2 += 5;
+				
+			//E
+			if ( ((robots.yellowPos & 0xF0) >> 4) < 15 && square.isOpenE && hvalues[robots.yellowPos + 16] < 5)
+				h2 += hvalues[robots.yellowPos + 16];
+			else
+				h2 += 5;
+				
+			//S
+			if ( (robots.yellowPos & 0x0F) < 15 && square.isOpenS && hvalues[robots.yellowPos + 1] < 5)
+				h2 += hvalues[robots.yellowPos + 1];
+			else
+				h2 += 5;
+			
+			//W
+			if ( ((robots.yellowPos & 0xF0) >> 4) > 0 && square.isOpenW && hvalues[robots.yellowPos - 16] < 5)
+				h2 += hvalues[robots.yellowPos - 16];
+			else
+				h2 += 5;
+		}
+		
+		//Blue
+		if (color != 2)
+		{
+		square = m_board->getSquare( (robots.bluePos & 0xF0) >> 4, robots.bluePos & 0x0F );
+		
+			//N
+			if ( (robots.bluePos & 0x0F) > 0 && square.isOpenN && hvalues[robots.bluePos - 1] < 5)
+				h2 += hvalues[robots.bluePos - 1];
+			else
+				h2 += 5;
+				
+			//E
+			if ( ((robots.bluePos & 0xF0) >> 4) < 15 && square.isOpenE && hvalues[robots.bluePos + 16] < 5)
+				h2 += hvalues[robots.bluePos + 16];
+			else
+				h2 += 5;
+				
+			//S
+			if ( (robots.bluePos & 0x0F) < 15 && square.isOpenS && hvalues[robots.bluePos + 1] < 5)
+				h2 += hvalues[robots.bluePos + 1];
+			else
+				h2 += 5;
+			
+			//W
+			if ( ((robots.bluePos & 0xF0) >> 4) > 0 && square.isOpenW && hvalues[robots.bluePos - 16] < 5)
+				h2 += hvalues[robots.bluePos - 16];
+			else
+				h2 += 5;
+		}	
+		
+		//Red
+		if (color != 3)
+		{
+		square = m_board->getSquare( (robots.redPos & 0xF0) >> 4, robots.redPos & 0x0F );
+		
+			//N
+			if ( (robots.redPos & 0x0F) > 0 && square.isOpenN && hvalues[robots.redPos - 1] < 5)
+				h2 += hvalues[robots.redPos - 1];
+			else
+				h2 += 5;
+				
+			//E
+			if ( ((robots.redPos & 0xF0) >> 4) < 15 && square.isOpenE && hvalues[robots.redPos + 16] < 5)
+				h2 += hvalues[robots.redPos + 16];
+			else
+				h2 += 5;
+				
+			//S
+			if ( (robots.redPos & 0x0F) < 15 && square.isOpenS && hvalues[robots.redPos + 1] < 5)
+				h2 += hvalues[robots.redPos + 1];
+			else
+				h2 += 5;
+			
+			//W
+			if ( ((robots.redPos & 0xF0) >> 4) > 0 && square.isOpenW && hvalues[robots.redPos - 16] < 5)
+				h2 += hvalues[robots.redPos - 16];
+			else
+				h2 += 5;		
+		}
+		
+		//Black
+			square = m_board->getSquare( (robots.blackPos & 0xF0) >> 4, robots.blackPos & 0x0F );
+		
+			//N
+			if ( (robots.blackPos & 0x0F) > 0 && square.isOpenN && hvalues[robots.blackPos - 1] < 5)
+				h2 += hvalues[robots.blackPos - 1];
+			else
+				h2 += 5;
+				
+			//E
+			if ( ((robots.blackPos & 0xF0) >> 4) < 15 && square.isOpenE && hvalues[robots.blackPos + 16] < 5)
+				h2 += hvalues[robots.blackPos + 16];
+			else
+				h2 += 5;
+				
+			//S
+			if ( (robots.blackPos & 0x0F) < 15 && square.isOpenS && hvalues[robots.blackPos + 1] < 5)
+				h2 += hvalues[robots.blackPos + 1];
+			else
+				h2 += 5;
+			
+			//W
+			if ( ( (robots.blackPos & 0xF0) >> 4) > 0 && square.isOpenW && hvalues[robots.blackPos - 16] < 5)
+				h2 += hvalues[robots.blackPos - 16];
+			else
+				h2 += 5;
+					
+		retval = h1;
+		retval = retval << 8;
+		retval += h2;
+		
+		return retval;
+	}
+
+	unsigned char Solver::m_getMove(unsigned char currentPos, Direction dir /*, unsigned char initialPos */)
+	{
+		/*	CurrentPos = 8bits
+			xxxx		yyyy
+			----		----
+			0-15xpos 	0-15ypos			
+		*/
+		
+		switch (dir)
+		{
+			case NORTH:
+				while ( (currentPos & 0x0F) > 0 )
+				{
+					//3 Possible collisions: Current square wall to the north, next square wall to the south, or next square robot blocker
+					if ( m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) ).isOpenN == false)
+						break;
+						
+					if ( m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) - 1).isOpenS == false)
+						break;
+						
+					if ( 	m_board->getRobots().greenPos == currentPos - 1 		||
+							m_board->getRobots().yellowPos == currentPos - 1 	||
+							m_board->getRobots().bluePos == currentPos - 1		||
+							m_board->getRobots().redPos == currentPos - 1		||
+							m_board->getRobots().blackPos == currentPos - 1		 )
+						break;
+						
+					currentPos -= 1;
+				}
+				break;
+				
+			case SOUTH:
+				while ( (currentPos & 0x0F) < 15 )
+				{
+					//3 Possible collisions: Current square wall to the north, next square wall to the south, or next square robot blocker
+					if ( m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) ).isOpenS == false)
+						break;
+						
+					if ( m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) + 1).isOpenN == false)
+						break;
+						
+					if ( 	m_board->getRobots().greenPos == currentPos + 1 		||
+							m_board->getRobots().yellowPos == currentPos + 1 	||
+							m_board->getRobots().bluePos == currentPos + 1		||
+							m_board->getRobots().redPos == currentPos + 1		||
+							m_board->getRobots().blackPos == currentPos + 1		 )
+						break;
+						
+					currentPos += 1;
+				}
+				break;
+			
+			case EAST:
+				while ( ((currentPos & 0xF0) >> 4) < 15 )
+				{
+					if ( m_board->getSquare( ((currentPos & 0xF0) >> 4), (currentPos & 0x0F) ).isOpenE == false)
+						break;
+						
+					if ( m_board->getSquare( ((currentPos & 0xF0) >> 4) + 1, (currentPos & 0x0F) ).isOpenW == false)
+						break;
+						
+					if ( 	m_board->getRobots().greenPos == currentPos + 16 	||
+							m_board->getRobots().yellowPos == currentPos + 16 	||
+							m_board->getRobots().bluePos == currentPos + 16		||
+							m_board->getRobots().redPos == currentPos + 16		||
+							m_board->getRobots().blackPos == currentPos + 16	 	)
+						break;
+						
+					currentPos += 16;
+				}
+				break;
+				
+			case WEST:
+				while ( ((currentPos & 0xF0) >> 4) > 0 )
+				{
+					if ( m_board->getSquare( ((currentPos & 0xF0) >> 4), (currentPos & 0x0F) ).isOpenW == false)
+						break;
+						
+					if ( m_board->getSquare( ((currentPos & 0xF0) >> 4) - 1, (currentPos & 0x0F) ).isOpenE == false)
+						break;
+						
+					if ( 	m_board->getRobots().greenPos == (currentPos - 16) 	||
+							m_board->getRobots().yellowPos == (currentPos - 16) ||
+							m_board->getRobots().bluePos == (currentPos - 16)	||
+							m_board->getRobots().redPos == (currentPos - 16)	||
+							m_board->getRobots().blackPos == (currentPos - 16)	 )
+						break;
+						
+					currentPos -= 16;
+				}
+				break;
+		}
+		
+		return currentPos;
+	}	
 	
-	void Solver::m_hash(Robots robots)
+	uint64_t Solver::m_hash(Robots robots)
 	{
 			uint64_t retval = 0;
 			retval += robots.greenPos;
-			retval << 4;
+			retval = retval << 4;
 			retval += robots.yellowPos;
-			retval << 4;
+			retval = retval << 4;
 			retval += robots.bluePos;
-			retval << 4;
+			retval = retval << 4;
 			retval += robots.redPos;
-			retval << 4;
+			retval = retval << 4;
 			retval += robots.blackPos;
 			return retval;
+	}
+	
+	void Solver::m_precalcH(unsigned char goalPos, GoalPiece goalPiece, Direction dir)
+	{
+		static unsigned char cost = 0;
+		if (hvalues[goalPos] > cost)
+		{
+			hvalues[goalPos] = cost;
+			Square currentSquare = m_board->getSquare( (goalPos & 0xF0) >> 4, goalPos & 0x0F );
+			
+			switch (dir)
+			{
+				case NODIRECTION: //Initial state
+
+					
+					cost += 1;
+					
+					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
+						m_precalcH(goalPos - 1, goalPiece, NORTH);
+					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
+						m_precalcH(goalPos + 1, goalPiece, SOUTH);
+					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
+						m_precalcH(goalPos + 16, goalPiece, EAST);
+					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
+						m_precalcH(goalPos - 16, goalPiece, WEST);
+						
+					cost -= 1;
+				break;
+				
+				case NORTH: //Can look north for free, won't look south
+				
+					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
+						m_precalcH(goalPos - 1, goalPiece, NORTH);
+						
+					cost += 1;
+					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
+						m_precalcH(goalPos + 16, goalPiece, EAST);
+					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
+						m_precalcH(goalPos - 16, goalPiece, WEST);
+					cost -= 1;					
+				break;
+				
+				case EAST: //Can look east for free, won't look west
+					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
+						m_precalcH(goalPos + 16, goalPiece, EAST);
+						
+					cost += 1;
+					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
+						m_precalcH(goalPos - 1, goalPiece, NORTH);
+					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
+						m_precalcH(goalPos + 1, goalPiece, SOUTH);					
+					cost -= 1;
+				break;
+				
+				case SOUTH: //Can look south for free, won't look north
+					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
+						m_precalcH(goalPos + 1, goalPiece, SOUTH);
+						
+					cost += 1;
+					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
+						m_precalcH(goalPos + 16, goalPiece, EAST);
+					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
+						m_precalcH(goalPos - 16, goalPiece, WEST);
+					cost -= 1;
+				break;
+				
+				case WEST: //Can look west for free, won't look east
+					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
+						m_precalcH(goalPos - 16, goalPiece, WEST);
+						
+					cost += 1;
+					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
+						m_precalcH(goalPos - 1, goalPiece, NORTH);
+					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
+						m_precalcH(goalPos + 1, goalPiece, SOUTH);	
+					cost -= 1;
+				break;
+			}
+		}
 	}
 	
 	void Solver::m_expandNode(Node* nodeToExpand)
@@ -129,11 +548,114 @@ namespace RicochetRobots
 			
 			if (!m_isSolved)
 			{
-				unsigned char xpos, ypos;
-				xpos = (nodeToExpand->robots.redPos & 0x0F) >> 4;
-				ypos = nodeToExpand->robots.redPos & 0xF0;
+				m_board->setRobots(nodeToExpand->robots);
 				
+				Node* nextNode = NULL;
+				Robots nextMove;
+				unsigned char oldPos, newPos;
+				
+				//Green
+				nextMove = nodeToExpand->robots;
+				oldPos = nodeToExpand->robots.greenPos;
+				for (int i = 0; i < 4; i++)
+				{
+					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					if (newPos != oldPos)
+					{
+						nextMove.greenPos = newPos;
+						
+						nextNode = new Node;
+						nextNode->parent = nodeToExpand;
+						nextNode->robots = nextMove;
+						nextNode->h = m_calcH(nextMove);
+						nextNode->d = nodeToExpand->d + 1;
+						m_next.push(nextNode);
+						nextNode = NULL;
+					}
+				}
+							
+				//Yellow
+				nextMove.greenPos = oldPos;
+				oldPos = nextMove.yellowPos;
+				for (int i = 0; i < 4; i++)
+				{
+					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					if (newPos != oldPos)
+					{
+						nextMove.yellowPos = newPos;
+						
+						nextNode = new Node;
+						nextNode->parent = nodeToExpand;
+						nextNode->robots = nextMove;
+						nextNode->h = m_calcH(nextMove);
+						nextNode->d = nodeToExpand->d + 1;
+						m_next.push(nextNode);
+						nextNode = NULL;	
+					}
+				}
+							
+				//Blue
+				nextMove.yellowPos = oldPos;
+				oldPos = nextMove.bluePos;
+				
+				for (int i = 0; i < 4; i++)
+				{
+					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					if (newPos != oldPos)
+					{
+						nextMove.bluePos = newPos;
+						
+						nextNode = new Node;
+						nextNode->parent = nodeToExpand;
+						nextNode->robots = nextMove;
+						nextNode->h = m_calcH(nextMove);
+						nextNode->d = nodeToExpand->d + 1;
+						m_next.push(nextNode);
+						nextNode = NULL;	
+					}
+				}	
+						
+				//Red
+				nextMove.bluePos = oldPos;
+				oldPos = nextMove.redPos;
+				for (int i = 0; i < 4; i++)
+				{
+					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					if (newPos != oldPos)
+					{
+						nextMove.redPos = newPos;
+						
+						nextNode = new Node;
+						nextNode->parent = nodeToExpand;
+						nextNode->robots = nextMove;
+						nextNode->h = m_calcH(nextMove);
+						nextNode->d = nodeToExpand->d + 1;
+						m_next.push(nextNode);
+						nextNode = NULL;	
+					}
+				}	
+										
+				//Black
+				nextMove.redPos = oldPos;
+				oldPos = nextMove.blackPos;
+				for (int i = 0; i < 4; i++)
+				{
+					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					if (newPos != oldPos)
+					{
+						nextMove.blackPos = newPos;
+						
+						nextNode = new Node;
+						nextNode->parent = nodeToExpand;
+						nextNode->robots = nextMove;
+						nextNode->h = m_calcH(nextMove);
+						nextNode->d = nodeToExpand->d + 1;
+						m_next.push(nextNode);
+						nextNode = NULL;	
+					}
+				}
 			}
+
 			
 			
 	}
@@ -146,6 +668,7 @@ namespace RicochetRobots
 					{
 						Node* nodeToExpand = m_next.peek();
 						m_next.pop();
+						
 						
 						//Check if node is on closed
 						uint64_t key = m_hash(nodeToExpand->robots);
@@ -173,7 +696,7 @@ namespace RicochetRobots
 	void Solver::stop()
 	{
 			//Cancel search- free up all the used memory
-			m_open.clearAndFree();
+			m_next.clearAndFree();
 			for (auto i = m_closed.begin(); i != m_closed.end(); i++)
 			{
 					delete i->second;
@@ -187,11 +710,19 @@ namespace RicochetRobots
 			m_isSolved = false;
 	}
 	
+	
 	void Solver::solutionNext()
 	{
 		if (m_isSolved)
 		{
-			/*...*/
+			auto iterEnd = m_solutionPath.end();
+			std::advance(iterEnd, -1);
+			if (m_solutionIter != iterEnd)
+			{
+				
+				std::advance(m_solutionIter, 1);
+					m_board->setRobots( (*m_solutionIter)->robots );
+			}
 		}
 	}
 	
@@ -199,7 +730,9 @@ namespace RicochetRobots
 	{
 		if (m_isSolved)
 		{
-				/*...*/
+				if (m_solutionIter != m_solutionPath.begin() )
+					std::advance(m_solutionIter, -1);
+				m_board->setRobots( (*m_solutionIter)->robots );
 		}
 	}
 	
@@ -207,7 +740,7 @@ namespace RicochetRobots
 	{
 		if (m_isSolved)
 		{
-				/*...*/
+				return static_cast<int>( m_solutionPath.size() );
 		}
 		
 		return -1;
