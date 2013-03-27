@@ -48,6 +48,16 @@ namespace RicochetRobots
 			NODIRECTION
 		};
 		
+		enum Color
+		{
+			GREEN,
+			YELLOW,
+			BLUE,
+			RED,
+			BLACK,
+			NOCOLOR
+		};
+		
 	public:
 		class cmpNodes
 		{
@@ -71,10 +81,10 @@ namespace RicochetRobots
 		void m_expandNode(Node* nodeToExpand); //Adds node to Closed; adds children to open, calculates children's h-value and d-value.
 		
 		//Helper functions for calculating moves
-		unsigned char m_getMove(unsigned char currentPos, Direction dir);
+		unsigned char m_getMove(unsigned char currentPos, Direction dir, Color pieceColor);
 
 		//Helper function: pre-calculate board hvalues
-		void m_precalcH(unsigned char goalPos, GoalPiece goalPiece, Direction dir = NODIRECTION);
+		void m_precalcH(unsigned char goalPos, Color goalColor, Direction dir = NODIRECTION);
 
 		//Closed set stored as hash
 		std::unordered_map<uint64_t, Node*> m_closed;

@@ -28,7 +28,40 @@ namespace RicochetRobots
 		{
 			//Initialize empty set with Initial State
 			m_board = board;
-			m_precalcH(m_board->getGoalPos(), m_board->getGoal());
+			Color color;
+			switch (m_board->getGoal())
+			{
+				case NOGOALPIECE:
+				case VORTEX:
+				case GREENTRIANGLE:
+				case GREENDIAMOND:
+				case GREENCIRCLE:
+				case GREENSQUARE:
+					color = GREEN;
+					break;
+					
+				case YELLOWTRIANGLE:
+				case YELLOWDIAMOND:
+				case YELLOWCIRCLE:
+				case YELLOWSQUARE:
+					color = YELLOW;
+					break;
+					
+				case BLUETRIANGLE:
+				case BLUEDIAMOND:
+				case BLUECIRCLE:
+				case BLUESQUARE:			
+					color = BLUE;
+					break;
+					
+				case REDTRIANGLE:
+				case REDDIAMOND:
+				case REDCIRCLE:
+				case REDSQUARE:
+					color = RED;
+					break;
+			}
+			m_precalcH(m_board->getGoalPos(), color);
 			
 			Node* root = new Node;
 			
@@ -158,7 +191,7 @@ namespace RicochetRobots
 		uint8_t h1 = 0;
 		uint8_t h2 = 0;
 		
-		int color = 0;
+		Color color = NOCOLOR;
 		Square square;
 		
 		switch (m_board->getGoal())
@@ -169,7 +202,7 @@ namespace RicochetRobots
 			case GREENDIAMOND:
 			case GREENCIRCLE:
 			case GREENSQUARE:
-				color = 0;
+				color = GREEN;
 				h1 = hvalues[robots.greenPos];
 				break;
 				
@@ -177,7 +210,7 @@ namespace RicochetRobots
 			case YELLOWDIAMOND:
 			case YELLOWCIRCLE:
 			case YELLOWSQUARE:
-				color = 1;
+				color = YELLOW;
 				h1 = hvalues[robots.yellowPos];
 				break;
 				
@@ -185,7 +218,7 @@ namespace RicochetRobots
 			case BLUEDIAMOND:
 			case BLUECIRCLE:
 			case BLUESQUARE:			
-				color = 2;
+				color = BLUE;
 				h1 = hvalues[robots.bluePos];
 				break;
 				
@@ -193,13 +226,13 @@ namespace RicochetRobots
 			case REDDIAMOND:
 			case REDCIRCLE:
 			case REDSQUARE:
-				color = 3;
+				color = RED;
 				h1 = hvalues[robots.redPos];
 				break;
 		}
 		
 		//Green
-		if (color != 0)
+		if (color != GREEN)
 		{
 			square = m_board->getSquare( (robots.greenPos & 0xF0) >> 4, robots.greenPos & 0x0F );
 			//N
@@ -228,7 +261,7 @@ namespace RicochetRobots
 		}
 		
 		//Yellow
-		if (color != 1)
+		if (color != YELLOW)
 		{
 		square = m_board->getSquare( (robots.yellowPos & 0xF0) >> 4, robots.yellowPos & 0x0F );
 		
@@ -258,7 +291,7 @@ namespace RicochetRobots
 		}
 		
 		//Blue
-		if (color != 2)
+		if (color != BLUE)
 		{
 		square = m_board->getSquare( (robots.bluePos & 0xF0) >> 4, robots.bluePos & 0x0F );
 		
@@ -288,7 +321,7 @@ namespace RicochetRobots
 		}	
 		
 		//Red
-		if (color != 3)
+		if (color != RED)
 		{
 		square = m_board->getSquare( (robots.redPos & 0xF0) >> 4, robots.redPos & 0x0F );
 		
@@ -351,7 +384,7 @@ namespace RicochetRobots
 		return retval;
 	}
 
-	unsigned char Solver::m_getMove(unsigned char currentPos, Direction dir /*, unsigned char initialPos */)
+	unsigned char Solver::m_getMove(unsigned char currentPos, Direction dir, Color color)
 	{
 		/*	CurrentPos = 8bits
 			xxxx		yyyy
@@ -359,23 +392,75 @@ namespace RicochetRobots
 			0-15xpos 	0-15ypos			
 		*/
 		
+		unsigned char initialPos = currentPos;
+		
+		
+		
 		switch (dir)
 		{
 			case NORTH:
 				while ( (currentPos & 0x0F) > 0 )
 				{
-					//3 Possible collisions: Current square wall to the north, next square wall to the south, or next square robot blocker
-					if ( m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) ).isOpenN == false)
+					Square currentSquare = m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) );
+					Color bumperColor = NOCOLOR;
+					bool bumperIsForward = false;
+					
+					if ( currentSquare.bumper != NOBUMPER && initialPos != currentPos)
+					{
+						switch (currentSquare.bumper)
+						{
+								case GREENFORWARD:
+								case GREENBACKWARD:
+									bumperColor = GREEN;
+									break;
+								case YELLOWFORWARD:
+								case YELLOWBACKWARD:
+									bumperColor = YELLOW;
+									break;
+								case BLUEFORWARD:
+								case BLUEBACKWARD:
+									bumperColor = BLUE;
+									break;
+								case REDFORWARD:
+								case REDBACKWARD:
+									bumperColor = RED;
+									break;
+								default:
+									break;
+						}
+						switch (currentSquare.bumper)
+						{
+								case GREENFORWARD:
+								case YELLOWFORWARD:
+								case BLUEFORWARD:
+								case REDFORWARD:
+									bumperIsForward = true;
+									break;
+								default:
+									break;
+						}					
+					}	
+					
+					if (color != bumperColor && bumperColor != NOCOLOR)
+					{
+							if (bumperIsForward)
+								currentPos = m_getMove(currentPos, EAST, color);
+							else
+								currentPos = m_getMove(currentPos, WEST, color);
+							break;
+					}
+					
+					if (currentSquare.isOpenN == false)
 						break;
-						
+								
 					if ( m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) - 1).isOpenS == false)
 						break;
 						
-					if ( 	m_board->getRobots().greenPos == currentPos - 1 		||
-							m_board->getRobots().yellowPos == currentPos - 1 	||
-							m_board->getRobots().bluePos == currentPos - 1		||
-							m_board->getRobots().redPos == currentPos - 1		||
-							m_board->getRobots().blackPos == currentPos - 1		 )
+					if ( 	(m_board->getRobots().greenPos  == currentPos - 1 	&& color != GREEN )||
+							(m_board->getRobots().yellowPos == currentPos - 1 	&& color != YELLOW)||
+							(m_board->getRobots().bluePos   == currentPos - 1	&& color != BLUE)  ||
+							(m_board->getRobots().redPos    == currentPos - 1	&& color != RED)   ||
+							(m_board->getRobots().blackPos  == currentPos - 1	&& color != BLACK)	 )
 						break;
 						
 					currentPos -= 1;
@@ -385,18 +470,66 @@ namespace RicochetRobots
 			case SOUTH:
 				while ( (currentPos & 0x0F) < 15 )
 				{
-					//3 Possible collisions: Current square wall to the north, next square wall to the south, or next square robot blocker
-					if ( m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) ).isOpenS == false)
+					Square currentSquare = m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) );
+					Color bumperColor = NOCOLOR;
+					bool bumperIsForward = false;
+					
+					if ( currentSquare.bumper != NOBUMPER && initialPos != currentPos)
+					{
+						switch (currentSquare.bumper)
+						{
+								case GREENFORWARD:
+								case GREENBACKWARD:
+									bumperColor = GREEN;
+									break;
+								case YELLOWFORWARD:
+								case YELLOWBACKWARD:
+									bumperColor = YELLOW;
+									break;
+								case BLUEFORWARD:
+								case BLUEBACKWARD:
+									bumperColor = BLUE;
+									break;
+								case REDFORWARD:
+								case REDBACKWARD:
+									bumperColor = RED;
+									break;
+								default:
+									break;
+						}
+						switch (currentSquare.bumper)
+						{
+								case GREENFORWARD:
+								case YELLOWFORWARD:
+								case BLUEFORWARD:
+								case REDFORWARD:
+									bumperIsForward = true;
+									break;
+								default:
+									break;
+						}					
+					}	
+					
+					if (color != bumperColor && bumperColor != NOCOLOR)
+					{
+							if (bumperIsForward)
+								currentPos = m_getMove(currentPos, WEST, color);
+							else
+								currentPos = m_getMove(currentPos, EAST, color);
+							break;
+					}
+					
+					if ( currentSquare.isOpenS == false)
 						break;
 						
 					if ( m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) + 1).isOpenN == false)
 						break;
 						
-					if ( 	m_board->getRobots().greenPos == currentPos + 1 		||
-							m_board->getRobots().yellowPos == currentPos + 1 	||
-							m_board->getRobots().bluePos == currentPos + 1		||
-							m_board->getRobots().redPos == currentPos + 1		||
-							m_board->getRobots().blackPos == currentPos + 1		 )
+					if ( 	(m_board->getRobots().greenPos  == currentPos + 1 	&& color != GREEN )||
+							(m_board->getRobots().yellowPos == currentPos + 1 	&& color != YELLOW)||
+							(m_board->getRobots().bluePos   == currentPos + 1	&& color != BLUE)  ||
+							(m_board->getRobots().redPos    == currentPos + 1	&& color != RED)   ||
+							(m_board->getRobots().blackPos  == currentPos + 1	&& color != BLACK)	 )
 						break;
 						
 					currentPos += 1;
@@ -406,17 +539,66 @@ namespace RicochetRobots
 			case EAST:
 				while ( ((currentPos & 0xF0) >> 4) < 15 )
 				{
-					if ( m_board->getSquare( ((currentPos & 0xF0) >> 4), (currentPos & 0x0F) ).isOpenE == false)
+					Square currentSquare = m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) );
+					Color bumperColor = NOCOLOR;
+					bool bumperIsForward = false;
+					
+					if ( currentSquare.bumper != NOBUMPER && initialPos != currentPos)
+					{
+						switch (currentSquare.bumper)
+						{
+								case GREENFORWARD:
+								case GREENBACKWARD:
+									bumperColor = GREEN;
+									break;
+								case YELLOWFORWARD:
+								case YELLOWBACKWARD:
+									bumperColor = YELLOW;
+									break;
+								case BLUEFORWARD:
+								case BLUEBACKWARD:
+									bumperColor = BLUE;
+									break;
+								case REDFORWARD:
+								case REDBACKWARD:
+									bumperColor = RED;
+									break;
+								default:
+									break;
+						}
+						switch (currentSquare.bumper)
+						{
+								case GREENFORWARD:
+								case YELLOWFORWARD:
+								case BLUEFORWARD:
+								case REDFORWARD:
+									bumperIsForward = true;
+									break;
+								default:
+									break;
+						}					
+					}	
+					
+					if (color != bumperColor && bumperColor != NOCOLOR)
+					{
+							if (bumperIsForward)
+								currentPos = m_getMove(currentPos, NORTH, color);
+							else
+								currentPos = m_getMove(currentPos, SOUTH, color);
+							break;
+					}
+					
+					if ( currentSquare.isOpenE == false )
 						break;
 						
 					if ( m_board->getSquare( ((currentPos & 0xF0) >> 4) + 1, (currentPos & 0x0F) ).isOpenW == false)
 						break;
 						
-					if ( 	m_board->getRobots().greenPos == currentPos + 16 	||
-							m_board->getRobots().yellowPos == currentPos + 16 	||
-							m_board->getRobots().bluePos == currentPos + 16		||
-							m_board->getRobots().redPos == currentPos + 16		||
-							m_board->getRobots().blackPos == currentPos + 16	 	)
+					if ( 	(m_board->getRobots().greenPos  == currentPos + 16 	&& color != GREEN )||
+							(m_board->getRobots().yellowPos == currentPos + 16 	&& color != YELLOW)||
+							(m_board->getRobots().bluePos   == currentPos + 16	&& color != BLUE)  ||
+							(m_board->getRobots().redPos    == currentPos + 16	&& color != RED)   ||
+							(m_board->getRobots().blackPos  == currentPos + 16	&& color != BLACK)	 )
 						break;
 						
 					currentPos += 16;
@@ -426,17 +608,66 @@ namespace RicochetRobots
 			case WEST:
 				while ( ((currentPos & 0xF0) >> 4) > 0 )
 				{
-					if ( m_board->getSquare( ((currentPos & 0xF0) >> 4), (currentPos & 0x0F) ).isOpenW == false)
+					Square currentSquare = m_board->getSquare( (currentPos & 0xF0) >> 4, (currentPos & 0x0F) );
+					Color bumperColor = NOCOLOR;
+					bool bumperIsForward = false;
+					
+					if ( currentSquare.bumper != NOBUMPER && initialPos != currentPos)
+					{
+						switch (currentSquare.bumper)
+						{
+								case GREENFORWARD:
+								case GREENBACKWARD:
+									bumperColor = GREEN;
+									break;
+								case YELLOWFORWARD:
+								case YELLOWBACKWARD:
+									bumperColor = YELLOW;
+									break;
+								case BLUEFORWARD:
+								case BLUEBACKWARD:
+									bumperColor = BLUE;
+									break;
+								case REDFORWARD:
+								case REDBACKWARD:
+									bumperColor = RED;
+									break;
+								default:
+									break;
+						}
+						switch (currentSquare.bumper)
+						{
+								case GREENFORWARD:
+								case YELLOWFORWARD:
+								case BLUEFORWARD:
+								case REDFORWARD:
+									bumperIsForward = true;
+									break;
+								default:
+									break;
+						}					
+					}	
+					
+					if (color != bumperColor && bumperColor != NOCOLOR)
+					{
+							if (bumperIsForward)
+								currentPos = m_getMove(currentPos, SOUTH, color);
+							else
+								currentPos = m_getMove(currentPos, NORTH, color);
+							break;
+					}
+					
+					if ( currentSquare.isOpenW == false )
 						break;
 						
 					if ( m_board->getSquare( ((currentPos & 0xF0) >> 4) - 1, (currentPos & 0x0F) ).isOpenE == false)
 						break;
 						
-					if ( 	m_board->getRobots().greenPos == (currentPos - 16) 	||
-							m_board->getRobots().yellowPos == (currentPos - 16) ||
-							m_board->getRobots().bluePos == (currentPos - 16)	||
-							m_board->getRobots().redPos == (currentPos - 16)	||
-							m_board->getRobots().blackPos == (currentPos - 16)	 )
+					if ( 	(m_board->getRobots().greenPos  == currentPos - 16 	&& color != GREEN )||
+							(m_board->getRobots().yellowPos == currentPos - 16 	&& color != YELLOW)||
+							(m_board->getRobots().bluePos   == currentPos - 16	&& color != BLUE)  ||
+							(m_board->getRobots().redPos    == currentPos - 16	&& color != RED)   ||
+							(m_board->getRobots().blackPos  == currentPos - 16	&& color != BLACK)	 )
 						break;
 						
 					currentPos -= 16;
@@ -451,24 +682,98 @@ namespace RicochetRobots
 	{
 			uint64_t retval = 0;
 			retval += robots.greenPos;
-			retval = retval << 4;
+			retval = retval << 8;
 			retval += robots.yellowPos;
-			retval = retval << 4;
+			retval = retval << 8;
 			retval += robots.bluePos;
-			retval = retval << 4;
+			retval = retval << 8;
 			retval += robots.redPos;
-			retval = retval << 4;
+			retval = retval << 8;
 			retval += robots.blackPos;
 			return retval;
 	}
 	
-	void Solver::m_precalcH(unsigned char goalPos, GoalPiece goalPiece, Direction dir)
-	{
+	void Solver::m_precalcH(unsigned char goalPos, Color goalColor, Direction dir)
+	{	
 		static unsigned char cost = 0;
 		if (hvalues[goalPos] > cost)
 		{
 			hvalues[goalPos] = cost;
 			Square currentSquare = m_board->getSquare( (goalPos & 0xF0) >> 4, goalPos & 0x0F );
+			if (currentSquare.bumper != NOBUMPER)
+			{
+				Color bumperColor = NOCOLOR;
+				bool bumperIsForward = false;
+				
+				switch (currentSquare.bumper)
+				{
+						case GREENFORWARD:
+						case GREENBACKWARD:
+							bumperColor = GREEN;
+							break;
+						case YELLOWFORWARD:
+						case YELLOWBACKWARD:
+							bumperColor = YELLOW;
+							break;
+						case BLUEFORWARD:
+						case BLUEBACKWARD:
+							bumperColor = BLUE;
+							break;
+						case REDFORWARD:
+						case REDBACKWARD:
+							bumperColor = RED;
+							break;
+						default:
+							break;
+				}
+				switch (currentSquare.bumper)
+				{
+						case GREENFORWARD:
+						case YELLOWFORWARD:
+						case BLUEFORWARD:
+						case REDFORWARD:
+							bumperIsForward = true;
+							break;
+						default:
+							break;
+				}
+				if (goalColor != bumperColor && bumperColor != NOCOLOR)
+				{
+					if (bumperIsForward)
+						switch (dir)
+						{
+								case NORTH:
+									dir = EAST;
+									break;
+								case EAST:
+									dir = NORTH;
+									break;
+								case SOUTH:
+									dir = WEST;
+									break;
+								case WEST:
+									dir = SOUTH;
+									break;
+						}
+					else
+						switch (dir)
+						{
+								case NORTH:
+									dir = WEST;
+									break;
+								case EAST:
+									dir = SOUTH;
+									break;
+								case SOUTH:
+									dir = EAST;
+									break;
+								case WEST:
+									dir = NORTH;
+									break;								
+						}
+				}
+					
+			}
 			
 			switch (dir)
 			{
@@ -478,13 +783,13 @@ namespace RicochetRobots
 					cost += 1;
 					
 					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
-						m_precalcH(goalPos - 1, goalPiece, NORTH);
+						m_precalcH(goalPos - 1, goalColor, NORTH);
 					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
-						m_precalcH(goalPos + 1, goalPiece, SOUTH);
+						m_precalcH(goalPos + 1, goalColor, SOUTH);
 					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
-						m_precalcH(goalPos + 16, goalPiece, EAST);
+						m_precalcH(goalPos + 16, goalColor, EAST);
 					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
-						m_precalcH(goalPos - 16, goalPiece, WEST);
+						m_precalcH(goalPos - 16, goalColor, WEST);
 						
 					cost -= 1;
 				break;
@@ -492,49 +797,57 @@ namespace RicochetRobots
 				case NORTH: //Can look north for free, won't look south
 				
 					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
-						m_precalcH(goalPos - 1, goalPiece, NORTH);
+						m_precalcH(goalPos - 1, goalColor, NORTH);
 						
 					cost += 1;
 					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
-						m_precalcH(goalPos + 16, goalPiece, EAST);
+						m_precalcH(goalPos + 16, goalColor, EAST);
+					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
+						m_precalcH(goalPos + 1, goalColor, SOUTH);
 					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
-						m_precalcH(goalPos - 16, goalPiece, WEST);
+						m_precalcH(goalPos - 16, goalColor, WEST);
 					cost -= 1;					
 				break;
 				
 				case EAST: //Can look east for free, won't look west
 					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
-						m_precalcH(goalPos + 16, goalPiece, EAST);
+						m_precalcH(goalPos + 16, goalColor, EAST);
 						
 					cost += 1;
 					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
-						m_precalcH(goalPos - 1, goalPiece, NORTH);
+						m_precalcH(goalPos - 1, goalColor, NORTH);
 					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
-						m_precalcH(goalPos + 1, goalPiece, SOUTH);					
+						m_precalcH(goalPos + 1, goalColor, SOUTH);		
+					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
+						m_precalcH(goalPos - 16, goalColor, WEST);
 					cost -= 1;
 				break;
 				
 				case SOUTH: //Can look south for free, won't look north
 					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
-						m_precalcH(goalPos + 1, goalPiece, SOUTH);
+						m_precalcH(goalPos + 1, goalColor, SOUTH);
 						
 					cost += 1;
+					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
+						m_precalcH(goalPos - 1, goalColor, NORTH);
 					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
-						m_precalcH(goalPos + 16, goalPiece, EAST);
+						m_precalcH(goalPos + 16, goalColor, EAST);
 					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
-						m_precalcH(goalPos - 16, goalPiece, WEST);
+						m_precalcH(goalPos - 16, goalColor, WEST);
 					cost -= 1;
 				break;
 				
 				case WEST: //Can look west for free, won't look east
 					if ( ((goalPos & 0xF0) >> 4) > 0 && currentSquare.isOpenW)
-						m_precalcH(goalPos - 16, goalPiece, WEST);
+						m_precalcH(goalPos - 16, goalColor, WEST);
 						
 					cost += 1;
 					if ( (goalPos & 0x0F) > 0 && currentSquare.isOpenN)
-						m_precalcH(goalPos - 1, goalPiece, NORTH);
+						m_precalcH(goalPos - 1, goalColor, NORTH);
+					if ( ((goalPos & 0xF0) >> 4) < 15 && currentSquare.isOpenE)
+						m_precalcH(goalPos + 16, goalColor, EAST);
 					if ( (goalPos & 0x0F) < 15 && currentSquare.isOpenS)
-						m_precalcH(goalPos + 1, goalPiece, SOUTH);	
+						m_precalcH(goalPos + 1, goalColor, SOUTH);	
 					cost -= 1;
 				break;
 			}
@@ -559,7 +872,7 @@ namespace RicochetRobots
 				oldPos = nodeToExpand->robots.greenPos;
 				for (int i = 0; i < 4; i++)
 				{
-					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					newPos = m_getMove(oldPos, static_cast<Direction>(i), GREEN);
 					if (newPos != oldPos)
 					{
 						nextMove.greenPos = newPos;
@@ -579,7 +892,7 @@ namespace RicochetRobots
 				oldPos = nextMove.yellowPos;
 				for (int i = 0; i < 4; i++)
 				{
-					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					newPos = m_getMove(oldPos, static_cast<Direction>(i), YELLOW);
 					if (newPos != oldPos)
 					{
 						nextMove.yellowPos = newPos;
@@ -600,7 +913,7 @@ namespace RicochetRobots
 				
 				for (int i = 0; i < 4; i++)
 				{
-					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					newPos = m_getMove(oldPos, static_cast<Direction>(i), BLUE);
 					if (newPos != oldPos)
 					{
 						nextMove.bluePos = newPos;
@@ -620,7 +933,7 @@ namespace RicochetRobots
 				oldPos = nextMove.redPos;
 				for (int i = 0; i < 4; i++)
 				{
-					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					newPos = m_getMove(oldPos, static_cast<Direction>(i), RED);
 					if (newPos != oldPos)
 					{
 						nextMove.redPos = newPos;
@@ -640,7 +953,7 @@ namespace RicochetRobots
 				oldPos = nextMove.blackPos;
 				for (int i = 0; i < 4; i++)
 				{
-					newPos = m_getMove(oldPos, static_cast<Direction>(i));
+					newPos = m_getMove(oldPos, static_cast<Direction>(i), BLACK);
 					if (newPos != oldPos)
 					{
 						nextMove.blackPos = newPos;
