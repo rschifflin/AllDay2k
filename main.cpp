@@ -58,16 +58,17 @@ RicochetRobots::Board* gameBoard = NULL;
 GUI::GUIManager* guiManager = NULL;
 bool hasQuit = false;
 
-int main()
+int main(int argc, char* argv[])
 {
 	if (init())
 		return 0;
-	Timer fps;
-	
+
 	testTimer = new Timer();
 	gameBoard = new RicochetRobots::Board();
 	solver = new RicochetRobots::Solver();	
 	
+	Timer fps;
+	fps.start();
 	while (!hasQuit)
 	{	
 		switch (solveMode)
@@ -94,17 +95,14 @@ int main()
 				//In this mode, various keypresses navigate the board's solution
 				break;
 		}
-			
-			handleInput();
+		
+		handleInput();	
+		if (fps.getTicks() > MS_PER_FRAME )
+		{
 			draw();
-
-			uint32_t elapsed = fps.getTicks();
-			if (elapsed < MS_PER_FRAME )
-			{
-				draw();
-				fps.reset();
-				fps.start();
-			}
+			fps.reset();
+			fps.start();
+		}
 	}
 	
 	SDL_Quit();

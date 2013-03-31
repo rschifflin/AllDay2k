@@ -696,7 +696,7 @@ namespace RicochetRobots
 	void Solver::m_precalcH(unsigned char goalPos, Color goalColor, Direction dir)
 	{	
 		static unsigned char cost = 0;
-		if (hvalues[goalPos] > cost)
+		if (hvalues[goalPos] >= cost)
 		{
 			hvalues[goalPos] = cost;
 			Square currentSquare = m_board->getSquare( (goalPos & 0xF0) >> 4, goalPos & 0x0F );
