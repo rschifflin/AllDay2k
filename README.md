@@ -1,4 +1,4 @@
-AllDay2K
+Ricochet Robots Solver
 ========
 
-general purpose repository for pet projects
+Solver for any board position in Ricochet Robots
